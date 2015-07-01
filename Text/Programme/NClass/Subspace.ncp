@@ -1,0 +1,94 @@
+<Project>
+  <Name>Subspace</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>Subspace Entwurf</Name>
+    <Language>CSharp</Language>
+    <Entities>
+      <Entity type="Class">
+        <Name>SubSpaceKP</Name>
+        <Access>Public</Access>
+        <Location left="630" top="320" />
+        <Size width="305" height="115" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public SubSpaceKP(SharkEngine engine, Subspace subspace)</Member>
+        <Member type="Method">protected override Knowledge getOffer()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>SubSpace</Name>
+        <Access>Public</Access>
+        <Location left="195" top="95" />
+        <Size width="294" height="135" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">SyncKB getBase()</Member>
+        <Member type="Method">Knowledge getKnowledge()</Member>
+        <Member type="Method">SemanticTag getDescription()</Member>
+        <Member type="Method">SharkCS getContext()</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>VersionKP</Name>
+        <Access>Public</Access>
+        <Location left="582" top="61" />
+        <Size width="385" height="196" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">TimestampList timestampList</Member>
+        <Member type="Method">protected void doInsert(Knowledge knowledge, KEPConnection kepConnection)</Member>
+        <Member type="Method">protected void doExpose(SharkCS context, KEPConnection kepConnection)</Member>
+        <Member type="Method">protected abstract Knowledge getOffer()</Member>
+        <Member type="Method">public void push()</Member>
+        <Member type="Method">public void pull()</Member>
+        <Member type="Method">public void synchronize()</Member>
+        <Modifier>Abstract</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>KnowledgePort</Name>
+        <Access>Public</Access>
+        <Location left="1045" top="82" />
+        <Size width="162" height="216" />
+        <Collapsed>True</Collapsed>
+        <Modifier>Abstract</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>SyncKP</Name>
+        <Access>Public</Access>
+        <Location left="1045" top="150" />
+        <Size width="162" height="216" />
+        <Collapsed>True</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>InMemoSubSpace</Name>
+        <Access>Public</Access>
+        <Location left="141" top="341" />
+        <Size width="408" height="196" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">SyncKB basis</Member>
+        <Member type="Field">SharkCS context</Member>
+        <Member type="Constructor">public InMemoSubSpace(SyncKB basis, SharkCS context, SematicTag description)</Member>
+        <Member type="Method">public SyncKB getBase()</Member>
+        <Member type="Method">public Knowledge getKnowledge()</Member>
+        <Member type="Method">public SharkCS getContext()</Member>
+        <Member type="Method">public SemanticTag getDescription()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Generalization" first="2" second="3">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="0" second="2">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="4" second="2">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="5" second="1">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>
