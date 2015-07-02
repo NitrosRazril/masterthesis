@@ -7,18 +7,19 @@
       <Entity type="Class">
         <Name>SubSpaceKP</Name>
         <Access>Public</Access>
-        <Location left="630" top="320" />
-        <Size width="305" height="115" />
+        <Location left="622" top="313" />
+        <Size width="305" height="128" />
         <Collapsed>False</Collapsed>
         <Member type="Constructor">public SubSpaceKP(SharkEngine engine, Subspace subspace)</Member>
         <Member type="Method">protected override Knowledge getOffer()</Member>
+        <Member type="Method">protected override boolean evaluate(SharkCS context)</Member>
         <Modifier>None</Modifier>
       </Entity>
       <Entity type="Interface">
         <Name>SubSpace</Name>
         <Access>Public</Access>
-        <Location left="195" top="95" />
-        <Size width="294" height="135" />
+        <Location left="157" top="45" />
+        <Size width="294" height="137" />
         <Collapsed>False</Collapsed>
         <Member type="Method">SyncKB getBase()</Member>
         <Member type="Method">Knowledge getKnowledge()</Member>
@@ -28,13 +29,14 @@
       <Entity type="Class">
         <Name>VersionKP</Name>
         <Access>Public</Access>
-        <Location left="582" top="61" />
-        <Size width="385" height="196" />
+        <Location left="570" top="45" />
+        <Size width="385" height="213" />
         <Collapsed>False</Collapsed>
         <Member type="Field">TimestampList timestampList</Member>
         <Member type="Method">protected void doInsert(Knowledge knowledge, KEPConnection kepConnection)</Member>
         <Member type="Method">protected void doExpose(SharkCS context, KEPConnection kepConnection)</Member>
         <Member type="Method">protected abstract Knowledge getOffer()</Member>
+        <Member type="Method">protected abstract boolean evaluate(SharkCS context)</Member>
         <Member type="Method">public void push()</Member>
         <Member type="Method">public void pull()</Member>
         <Member type="Method">public void synchronize()</Member>
@@ -43,7 +45,7 @@
       <Entity type="Class">
         <Name>KnowledgePort</Name>
         <Access>Public</Access>
-        <Location left="1045" top="82" />
+        <Location left="1032" top="70" />
         <Size width="162" height="216" />
         <Collapsed>True</Collapsed>
         <Modifier>Abstract</Modifier>
@@ -51,23 +53,32 @@
       <Entity type="Class">
         <Name>SyncKP</Name>
         <Access>Public</Access>
-        <Location left="1045" top="150" />
+        <Location left="1043" top="141" />
         <Size width="162" height="216" />
         <Collapsed>True</Collapsed>
         <Modifier>None</Modifier>
       </Entity>
       <Entity type="Class">
-        <Name>InMemoSubSpace</Name>
+        <Name>AbstractSubSpace</Name>
         <Access>Public</Access>
-        <Location left="141" top="341" />
-        <Size width="408" height="196" />
+        <Location left="103" top="236" />
+        <Size width="408" height="201" />
         <Collapsed>False</Collapsed>
         <Member type="Field">SyncKB basis</Member>
         <Member type="Field">SharkCS context</Member>
-        <Member type="Constructor">public InMemoSubSpace(SyncKB basis, SharkCS context, SematicTag description)</Member>
+        <Member type="Constructor">public AbstractSubSpace(SyncKB basis, SharkCS context, SematicTag description)</Member>
         <Member type="Method">public SyncKB getBase()</Member>
         <Member type="Method">public Knowledge getKnowledge()</Member>
         <Member type="Method">public SharkCS getContext()</Member>
+        <Member type="Method">public boolean equals(Object other)</Member>
+        <Modifier>Abstract</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>InMemoSubSpace</Name>
+        <Access>Public</Access>
+        <Location left="157" top="500" />
+        <Size width="289" height="96" />
+        <Collapsed>False</Collapsed>
         <Member type="Method">public SemanticTag getDescription()</Member>
         <Modifier>None</Modifier>
       </Entity>
@@ -86,6 +97,10 @@
         <EndOrientation>Horizontal</EndOrientation>
       </Relationship>
       <Relationship type="Realization" first="5" second="1">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="6" second="5">
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
       </Relationship>
