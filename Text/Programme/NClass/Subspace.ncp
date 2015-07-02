@@ -59,27 +59,19 @@
         <Modifier>None</Modifier>
       </Entity>
       <Entity type="Class">
-        <Name>AbstractSubSpace</Name>
+        <Name>StandardSubSpace</Name>
         <Access>Public</Access>
         <Location left="103" top="236" />
-        <Size width="408" height="201" />
+        <Size width="408" height="213" />
         <Collapsed>False</Collapsed>
         <Member type="Field">SyncKB basis</Member>
         <Member type="Field">SharkCS context</Member>
-        <Member type="Constructor">public AbstractSubSpace(SyncKB basis, SharkCS context, SematicTag description)</Member>
+        <Member type="Constructor">public StandardSubSpace(SyncKB basis, SharkCS context, SematicTag description)</Member>
         <Member type="Method">public SyncKB getBase()</Member>
         <Member type="Method">public Knowledge getKnowledge()</Member>
+        <Member type="Method">public SemanticTag getDescription()</Member>
         <Member type="Method">public SharkCS getContext()</Member>
         <Member type="Method">public boolean equals(Object other)</Member>
-        <Modifier>Abstract</Modifier>
-      </Entity>
-      <Entity type="Class">
-        <Name>InMemoSubSpace</Name>
-        <Access>Public</Access>
-        <Location left="157" top="500" />
-        <Size width="289" height="96" />
-        <Collapsed>False</Collapsed>
-        <Member type="Method">public SemanticTag getDescription()</Member>
         <Modifier>None</Modifier>
       </Entity>
     </Entities>
@@ -97,10 +89,6 @@
         <EndOrientation>Horizontal</EndOrientation>
       </Relationship>
       <Relationship type="Realization" first="5" second="1">
-        <StartOrientation>Vertical</StartOrientation>
-        <EndOrientation>Vertical</EndOrientation>
-      </Relationship>
-      <Relationship type="Generalization" first="6" second="5">
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
       </Relationship>
