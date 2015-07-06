@@ -9,38 +9,53 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{geometry}
 
+\usepackage[charter]{mathdesign}
+\usepackage{wallpaper}
+
 \setlength{\parindent}{0em}
 \geometry{a4paper, top=25mm, left=40mm, right=25mm, bottom=30mm,
 headsep=10mm, footskip=12mm} 
 
-\title{Masterarbeit}
-\author{Jens Grundmann}
-\date{\today} 
-
 \begin{document}
-
 	\begin{titlepage}
-		\maketitle	
+		\topmargin12cm
+		\ULCornerWallPaper{1}{../Bilder/Heander.jpg}
+		
+		\begin{flushright}	
+			{\large Masterarbeit \\}
+			\begin{Large}
+				\textbf{
+					Ein System zur partiellen Synchronisation \\ 
+					von Wissensbasen für dezentrale soziale Netzwerke \\
+				} 
+			\end{Large}
+			\vspace{1.0cm}
+			\begin{large}	
+				von Jens Grundmann \\
+				\today \\
+				\vspace{1.0cm}
+				Hochschule für Technik und Wirtschaft Berlin \\
+				Fachbereich Wirtschaftswissenschaften II \\
+				Studiengang Angewandte Informatik \\
+				\vspace{1.0cm}
+				Erstgutachter/in Prof. Vorname Name \\
+				Zweitgutachter/in Vorname Name \\	
+				\vspace{0.5cm}
+				\begin{center}
+					\includegraphics{../Bilder/htw_logo.jpg}
+				\end{center}				
+			\end{large}
+		\end{flushright}	
+
 	\end{titlepage}
+% ----------------------------------------------------------------
+\ClearWallPaper
 
 \tableofcontents
 \newpage
 
-	\section{Einleitung}
-	Das Ziel dieses Forschungsprojektes ist die Untersuchung der Möglichkeit einer
-	Kommunikation von JavaScript mit einer Java API. Die zugrunde liege API ist hier das 
-	von Prof. Thomas Schwotzer liegende ScharkNet. \cite{SharkNet01} \\
+	\section{Funktionale Anforderungen}
 	
-	Diese Brücke soll es ermöglichen genannte API von Mozilla Thunderbird aus anzusprechen.
-	Die Gestaltung der Oberfläche in vielen Mozilla Produkten basiert auf einer XML 
-	Syntax genannt XUL \cite{Mozilla01}. Dieses wird mit CSS gestaltet und dynamische 
-	Inhalt werden über JavaScript programmiert, womit es starke Ähnlichkeiten mit HTML
-	hat. Somit würde dies eine Möglichkeit der Gestaltung einer grafischen Oberfläche 
-	bieten, die, gegenüber Bibliotheken wie Java Swing, einfacher zu handhaben ist und
-	überzeugendere Ergebnisse, im Sinne grafischer Gestaltung, bieten würde. Da es sich
-	bei XUL Dateien grundlegend um ein XML Dokument handelt, kann dessen DOM auch mit Bibliotheken 
-	wie jQuery \cite{jQuery01} manipuliert werden, was JavaScript die gleichen Möglichkeiten
-	wie in einem Webbrowser bietet. Zusätzlich könnten man erwähnen Funktionen der Anwendung,
-	wie das senden von Emails in Thunderbird, zu nutzen.
+	This is a test!
 
 \end{document}
