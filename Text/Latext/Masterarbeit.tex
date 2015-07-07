@@ -8,19 +8,23 @@
 \usepackage{float}
 \usepackage[hidelinks]{hyperref}
 \usepackage{geometry}
-
-\usepackage[charter]{mathdesign}
 \usepackage{wallpaper}
 
-\setlength{\parindent}{0em}
-\geometry{a4paper, top=25mm, left=40mm, right=25mm, bottom=30mm,
-headsep=10mm, footskip=12mm} 
+\geometry{
+	a4paper, 
+	top=25mm,
+	left=40mm,
+	right=25mm,
+	bottom=30mm,
+	headsep=10mm,
+	footskip=12mm
+} 
 
 \begin{document}
+
 	\begin{titlepage}
 		\topmargin12cm
 		\ULCornerWallPaper{1}{../Bilder/Heander.jpg}
-		
 		\begin{flushright}	
 			{\large Masterarbeit \\}
 			\begin{Large}
@@ -46,16 +50,47 @@ headsep=10mm, footskip=12mm}
 				\end{center}				
 			\end{large}
 		\end{flushright}	
-
 	\end{titlepage}
-% ----------------------------------------------------------------
-\ClearWallPaper
-
-\tableofcontents
-\newpage
-
-	\section{Funktionale Anforderungen}
 	
-	This is a test!
+	\ClearWallPaper
+	\tableofcontents
+	\newpage
+
+	\section{Zielsetzung}
+	
+	Ziel dieser Arbeit ist es eine Softwarekomponente zu entwickeln, die 
+	partiellen Synchronisation von Wissensbasen ermöglicht. Eine Wissensbasen
+	ist dabei nichts anderes als ein eine Menge an Daten, die in einer
+	bestimmten Stuckatur vorliegen bzw. durch eine abstrakte Darstellung
+	beschreibbar sind. \\
+	Der zu synchronisierende Teilbereich wird als Subspace(engl.:
+	\emph{subspace} = Unterraum) bezeichnet in dieser Arbeit, da er einen
+	mathematischen Unterraum der Wissensbasis darstellt.
+	
+	\subsection{Funktionale Anforderungen}
+	
+	Im Folgendem werden der die funktionalen Anforderungen besprochen. Diese
+	beschreiben die Features der Softwarekomponente, welche notwendig sind,
+	um das Ziel dieser Arbeit zu erfüllen.
+	
+	\subparagraph{Beschreibbarkeit}
+	
+	\begin{itemize}
+		\item \textbf{Basis:} Hieraus werden die Daten extrahiert.
+		\item \textbf{Kontext:} Beschreibt die SubSpace. Wird zur Extraktion
+			  verwendet.
+		\item \textbf{Thema:} Grenzt SubSpace von anderer SubSpace ab. Es dient 				  zur (technischen) Identifikation und ist Teil des Kontextes.
+	\end{itemize} 	
+	
+	\subsection{Nicht funktionale Anforderungen}
+	
+	Die in diesem Teil beschriebenen Eigenschafenten, tragen nicht zur
+	Zielerfüllung bei, verbessern aber die Qualität der zu entwickelnden
+	Softwarekomponente.
+	
+	\newpage
+	\listoffigures
+	\newpage
+	\listoftables
 
 \end{document}
