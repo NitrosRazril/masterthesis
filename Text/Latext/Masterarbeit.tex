@@ -2,6 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}	
+\usepackage[babel,german=quotes]{csquotes}
 \usepackage[none]{hyphenat}
 \usepackage{listings}
 \usepackage{graphicx}
@@ -9,6 +10,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{geometry}
 \usepackage{wallpaper}
+\usepackage[backend=bibtex]{biblatex}
 
 \geometry{
 	a4paper, 
@@ -19,6 +21,8 @@
 	headsep=10mm,
 	footskip=12mm
 } 
+
+\addbibresource{../Zitate/zitate.bib}
 
 \begin{document}
 
@@ -61,15 +65,21 @@
 	\subsection{Zielsetzung}
 	
 	Ziel dieser Arbeit ist es eine Softwarekomponente zu entwickeln, die 
-	partiellen Synchronisation von Wissensbasen ermöglicht. Eine Wissensbasen
+	partiellen Synchronisation von Wissensbasen ermöglicht. Eine Wissensbasis
 	ist dabei nichts anderes als ein eine Menge an Daten, die in einer
 	bestimmten Stuckatur vorliegen bzw. durch eine abstrakte Darstellung
-	beschreibbar sind. \\
-	Der zu synchronisierende Teilbereich wird als Subspace(engl.:
-	\emph{subspace} = Unterraum) bezeichnet in dieser Arbeit, da er einen
-	mathematischen Unterraum der Wissensbasis darstellt.
+	beschreibbar sind. 
 	
 	\section{Grundlagen}	
+	
+	Das folgende Kapitel widmet sich den Grundlagen, auf denen die Arbeit
+	aufbaut. Es werden die Themen Shark Framework,[*insert more here*]
+	besprochen.
+	
+	\subsection{Shark Framework}
+	
+	Das ist ein Zitat. \cite{SharkFW}
+	
 	
 	\section{Konzeption}	
 	
@@ -96,6 +106,8 @@
 	Zielerfüllung bei, verbessern aber die Qualität der zu entwickelnden
 	Softwarekomponente.
 	
+	\newpage
+	\printbibliography
 	\newpage
 	\listoffigures
 	\newpage
