@@ -57,13 +57,23 @@
 		\end{flushright}	
 	\end{titlepage}
 	
-	\ClearWallPaper
+	\ClearWallPaper	
+	\newpage
+	
+	{\LARGE \textbf{Insert later}}
+	\begin{itemize}
+		\item \hyperref[sec:sharkthemes]{Themen Shark Framework}.
+	\end{itemize} 	
+	
+	\newpage	
 	\tableofcontents
 	\newpage
 
-	\section{Einleitung}
 
-	\subsection{Zielsetzung}
+	\section{Einleitung}
+	
+	
+
 	
 	Ziel dieser Arbeit ist es eine Softwarekomponente zu entwickeln, die 
 	partiellen Synchronisation von Wissensbasen ermöglicht. Eine Wissensbasis
@@ -71,41 +81,58 @@
 	bestimmten Stuckatur vorliegen bzw. durch eine abstrakte Darstellung
 	beschreibbar sind. 
 	
-	\section{Grundlagen}	
+	\section{Grundlagen}
+	\label{sec:sharkthemes}	
 	
 	Das folgende Kapitel widmet sich den Grundlagen, auf denen die Arbeit
-	aufbaut. Es werden die Themen Shark Framework,[*insert more here*]
+	aufbaut. Es werden die Themen Shark Framework,[*insert more here*]	
 	besprochen.
 	
 	\subsection{Shark Framework}
 	
 	Das ist ein Zitat. \cite{SharkFW}
 	
-	
 	\section{Konzeption}	
 	
-	\subsection{Anforderungen}
+	\subsection{Funktionale und nicht funktionale Anforderungen}
 	
-	\subsubsection{Funktionale Anforderungen}
+	Im Folgendem werden die funktionalen und nicht funktionale
+	Anforderungen besprochen. Diese	beschreiben welche Features die
+	Softwarekomponente bereitstellen soll, sowie wichtige Aspekte der
+	Qualitätssicherung.
 	
-	Im Folgendem werden der die funktionalen Anforderungen besprochen. Diese
-	beschreiben die Features der Softwarekomponente, welche notwendig sind,
-	um das Ziel dieser Arbeit zu erfüllen.
-	
-	\subparagraph{Beschreibbarkeit}
-	
+	\paragraph{Funktionale Anforderungen}
 	\begin{itemize}
-		\item \textbf{Basis:} Hieraus werden die Daten extrahiert.
-		\item \textbf{Kontext:} Beschreibt die SubSpace. Wird zur Extraktion
-			  verwendet.
-		\item \textbf{Thema:} Grenzt SubSpace von anderer SubSpace ab. Es dient 				  zur (technischen) Identifikation und ist Teil des Kontextes.
+		\item \textbf{Beschreibbarkeit:} Es ist möglich einen Raum von
+		Daten zu beschreiben und diesen von einem anderen Raum
+		von Daten abzugrenzen. 
+		\item \textbf{Abhängigkeiten:} Es ist möglich Abhängigkeiten zwischen
+		Räumen zu definieren. So soll beispielsweise der Raum Java-Chat ein 
+		Kind des Programmiersprachen-Chat Raumes sein können.
+		\item \textbf{Persistenz:} Es soll möglich sein die Beschreibung der
+		Räume von Daten persistent zu speichern. Die gespeicherten Räume
+		bleiben somit erhalten und und können zu späterem Zeitpunkt neu
+		geladen werden.
+		\item \textbf{Synchronisation:} Es ist möglich die Räume von Daten 
+		und ihre Abhängigkeiten mit Peers in einem Peer to Peer Netzwerk 
+		zu synchronisieren. Ziel ist es, dass die Räume nach der 
+		Synchronisation identisch von Aufbau und Inhalt sind.
 	\end{itemize} 	
 	
-	\subsubsection{Nicht funktionale Anforderungen}
-	
-	Die in diesem Teil beschriebenen Eigenschafenten, tragen nicht zur
-	Zielerfüllung bei, verbessern aber die Qualität der zu entwickelnden
-	Softwarekomponente.
+	\paragraph{Nicht funktionale Anforderungen}
+	\begin{itemize}
+		\item \textbf{Build-Management:} Die Softwarekomponente ist mittels
+		eines zu bestimmenden Build Tools so eingerichtet, dass das Aufsetzen 
+		der	Entwicklungsumgebung für andere Entwickler schnell und einfach
+		zu erledigen ist. Mögliche Synergien des gewählten Tools mit anderen
+		Systemen zur Softwareentwicklung und Qualitätssicherung, zum Beispiel  
+		Jenkins \cite{Jenkins}, sind wünschenswert.
+		\item \textbf{Testbarkeit:} Die zu Softwarekomponente
+		ist modular so aufgebaut, dass sie durch Modultest testbar ist.
+		\item \textbf{Modultest:} Es existieren bereit eine Reihe von
+		Modultest, welche die grundlegende Funktionalität der 
+		Softwarekomponente sicherstellen.
+	\end{itemize} 
 	
 	\newpage
 	\printbibliography[type=online,heading=subbibliography,title={Webseiten}]
