@@ -134,12 +134,13 @@
 	\section{Grundlagen}
 	
 	Das folgende Kapitel widmet sich den Grundlagen, auf denen die Arbeit
-	aufbaut. Zuerst werden die Funktionale und nicht funktionale Anforderungen
+	beruht. Zuerst werden die Funktionale und nicht funktionale Anforderungen
 	festgelegt, da diese die Basis der zu entwickelnden Softwarekomponente
 	darstellen. Anschließen wird auf das Shark Framework eingegangen, auf dem
 	diese Arbeit aufbaut.	
 	
 	\subsection{Funktionale und nicht funktionale Anforderungen}
+	\label{sec:requirements}
 	
 	Im Folgendem werden die funktionalen und nicht funktionale
 	Anforderungen besprochen. Diese	beschreiben welche Features die
@@ -162,6 +163,13 @@
 		und ihre Abhängigkeiten mit Peers in einem Peer to Peer Netzwerk 
 		zu synchronisieren. Ziel ist es, dass die Räume nach der 
 		Synchronisation identisch von Aufbau und Inhalt sind.
+		\item \textbf{Änderbarkeit:} Es muss möglich sein eine Beschreibung
+		eines Raumes zu ändern inklusive ihrer Abhängigkeiten. Der Raum
+		selbst soll dabei bestehe bleiben und ohne weiteren Aufwand auffindbar 
+		wie	zuvor. Das heißt, er muss genauso aus der seiner persistenten Form 
+		geladen werde können wie zuvor.
+		\item \textbf{Änderung kommunizieren:} Änderungen müssen
+		kommuniziert werden können, sodass sich andere Peers synchronisieren.
 	\end{itemize} 	
 	
 	\paragraph{Nicht funktionale Anforderungen}
@@ -257,13 +265,210 @@
 	Wissensbasis zu speichern. Dies sind Name-Wert-Paare, wobei sowohl Name 
 	als auch Wert eine Zeichenkette ist.
 	
+	\subsubsection{Knowledge Port} 
+	Das wichtigste Objekt zur Kommunikation im Peer to Peer Netzwerk vom Shark
+	Framework ist der KnowledgePort. Hierbei handelt es um eine abstrakte Klasse,
+	welche die Implementierung von \emph{doExpose(SharkCS interest, KEPConnection
+	kepConnection)} und \emph{doInsert(Knowledge knowledge, KEPConnection
+	kepConnection)} erfordert. \\
+	
+	Die doExpose-Methode erhält ein Interesse in der Form eines SharkCS. Wenn
+	ein Interesse versandt wurde, so wird sie als Erstes aufgerufen. Ihre 
+	generelle Aufgabe ist zu ermitteln, ob das Interesse für, das erhalten wurde, 
+	für den KnowledgePort von Relevanz ist. \\
+	
+	Die doInsert-Methode hingegen erhält ein Knowledge Objekt, welches echte
+	Daten enthält. Es wird in der Regel gegen Ende der Kommunikation auf gerufen
+	und soll die Daten in die Wissensbasis einfügen. \\
+	
+	Beide Methoden erhalten ein KEPConnection Objekt mit dem sie Informationen 
+	über den Sender erhalten können. Des Weiteren kann mithilfe dieses 
+	Objektes Daten an die doExpose und doInsert-Methode anderer Peer gesendet
+	werden. Dies erlaubt einen mehrfachen Datentausch. Ein Beispiel hierzu ist
+	der Synchronisationsprozess der SychKB, der im Nächten Abschnitt beschrieben 
+	wird und in \autoref{fig:SyncSeq} skizziert ist. \\
+	
+	Zu beachten ist, dass die Aussagen hier dem Standardfall entsprechen, wonach
+	der Knowledge Port entworfen wurde. Die tatsächliche Implementierung und
+	damit der Umgang mit dem SharkCS Objekt und dem Knowledge kann von jedem
+	Entwickler selbst bestimmt werden.Einzig vorgeschrieben ist, dass zuerst
+	ein Interesse versandt wird und Daten in der Form eines Knowledge Objektes
+	gesendet werden.
+	
 	\subsubsection{SyncKB} 
 	
 	Leider gibt es, abgesehen der Javadoc Dokumentation, keine genaue
 	Beschreibung der Funktionsweise der SyncKB. Daher soll hier auf die
 	generelle Funktionsweise dieser eingegangen werden. Weitere Informationen
 	können den Quellcode selbst entnommen werden, der im Github vom SharkFW
-	zu finden ist. \cite{SyncKB}
+	zu finden ist. \cite{SyncKB} \\
+	
+	Die SyncKB enthält den Hauptteil ihrer Logik im SyncKP. Die eigentliche
+	Synchronisation findet während des Kommunikationsprozesses statt und ist
+	keine Eigenschaft der Wissensbasis selbst. Die einzelnen Elemente der SyncKB
+	basiert hauptsächlich auf dem Entwurfsmuster Wrapper. So wurden den einzelnen
+	Element zwei zusätzliche Informationen mitgeben: 
+	
+	\begin{itemize}
+		\item \textbf{Version:} Die Aktuelle Version des Elements. Ein neu 
+		erstelltes Element startet bei 1 und bei jeder Änderung wird die
+		Version um eins erhöht.
+		\item \textbf{Zeitstempel:} Ein Zeitstempel der angibt, wann die letzte
+		Änderung an dem Element vorgenommen wurde.
+	\end{itemize} 
+	
+	Wie erwähnt befindet sich der Großteil der Logik im SyncKP.
+	\autoref{fig:SyncSeq} zeigt die ablaufende Kommunikation zwischen zwei
+	Peers, die hier vereinfacht Alice und Bob genannt werden sollen.	
+	
+	\begin{figure}[H] 
+		\includegraphics[width=\linewidth]{../Bilder/sync_seq.jpg}
+		\caption{Kommunikation der SyncKB}
+		\label{fig:SyncSeq}
+	\end{figure}
+	
+	\begin{enumerate}
+		\item \textbf{Interesse senden:} Der Prozess beginnt damit, dass Alice
+		ihr Interesse zur Synchronisation verkündet. Das hierbei gesendete
+		Interesse ist ein künstliches Interesse. Es wird vom SyncKP intern
+		verwendet und dient lediglich als Datenhalter für diesen.
+		\item \textbf{Kontextpunkte extrahieren:} Nachdem das Interesse an der
+		Synchronisation Bob erreicht hat stellt dieser ein Angebot für Alice
+		zusammen. Im linken Teil von \autoref{fig:SyncFlow} ist der
+		Algorithmus dazu skizziert. Hierbei wird ausgenutzt, dass an jedem
+		SyncContextPoint ein Zeitstempel der letzten Änderung gespeichert ist.
+		Dieser wird mit dem Zeitpunkt des letzten Treffens mit dem Peer,
+		das die Synchronisation anfordert, verglichen. Dazu ist an der
+		Wissensbasis, per Property, eine Liste von Name-Wert-Paare gespeichert, 
+		welche den Zeitpunkt des letzte Treffen mit einem Peer enthält.
+		Genauer ist ein Peer jeweils einem Zeitstempel zugeordnet. Alle
+		Kontextpunkte, deren letzte Änderung neuer ist als das letzte Treffe mit
+		einem spezifischen Peer, hier Alice, werden angeboten.
+		\item \textbf{Angebot senden:} Die extrahierten Kontextpunkte werden per
+		Property am künstlichen Interesse Alice als Angebot zugewendet. Zu beachten
+		ist dabei, dass nur die Daten eines Kontextpunktes versendet werden.
+		Eventuelle Informationen, die diesem zugeordnet sind, werden nicht
+		versandt.
+		\item \textbf{Angebot analysieren:} Alice analysiert das Angebot, dass
+		sie von Bob erhalten hat. Der Algorithmus ist ähnlich dem späteren Einfügen
+		von der Kontextpunkte und im rechten Teil von \autoref{fig:SyncFlow}
+		skizziert. Alice wird alle Kontextpunkte von Bob anfragen, die sie
+		nicht besitzt oder die bei Bob eine höhere Versionsnummer haben als
+		bei ihr selbst.
+		\item \textbf{Anfrage senden:} Die anzufragenden Kontextpunkte werden
+		abermals am künstlichen Interesse per Property gespeichert und Bob
+		zugesandt.  
+		\item \textbf{Wissen bauen und Zeitstempel zurücksetzen:} Die angefragten
+		Kontextpunkte werden nun aus Bobs Wissensbasis extrahiert und in einem
+		Knowledge Objekt gespeichert. Zusätzlich werden	alle Themen und Peers,
+		anhand der beim Erstellen des SyncKP übergebenen FragmentationParameter,
+		dem Knowledge Objekt übergeben.
+		\item \textbf{Wissen senden:} Das Knowledge Objekt wird nun an Alice
+		gesendet.
+		\item \textbf{Wissen in Wissensbasis einfügen:} Alice überprüft das
+		die Kontextpunkte anschließend noch einmal anhand das im rechten Teil von
+		\autoref{fig:SyncFlow} skizzierten Algorithmus und fügt diese dann in
+		ihre Wissensbasis ein.
+	\end{enumerate} 	
+	
+	\begin{figure}[H] 
+		\includegraphics[width=\linewidth]{../Bilder/sync_flow.jpg}
+		\caption{Algorithmus zum Extrahieren und Einfügen von Wissen der SyncKB}
+		\label{fig:SyncFlow}
+	\end{figure}
+	
+	Das System von Angebot und Anfrage wird verwendet, um das Datenvolumen während
+	der Kommunikation möglichst gering zu halten. Wie erwähnt enthalten Angebot
+	und Anfrage nur die nötigen Informationen zu den Kontextpunkten, wie
+	Koordinaten, Zeitstempel und Version, und zusätzlich mit dem Punkt verknüpften
+	Informationen. Erst gegen Ende des Synchronisationsalgorithmus wird ein 
+	Objekt mit den vollständiges Daten erstellt und versandt.
+	
+	\subsection{Datenstrukturen zur Darstellung von Beziehungen}
+	
+	Wie in Abschnitt \ref{sec:requirements} beschrieben soll es möglich sein
+	Abhängigkeiten zwischen Räumen aufzustellen. Diese Abhängigkeiten stellen
+	eine Beziehung zwischen Daten da. Daher werden in diesem Abschnitt 
+	Datenstrukturen besprochen, die eine solche Beziehung darstellen können.
+	Dabei wird darauf eingegangen, wie sie die Daten und Beziehungen untereinander
+	dargestellt sind. Weitergehende Erklärungen, wie mögliche Operationen, werden
+	nur durch Links zu entsprechender Literatur gegeben.
+	
+	\subsubsection{Verkette Listen}
+	
+	Verkette Listen (beschrieben in \cite{FundData}, Kapitel 4) sind Listen,
+	wo jedes Element Referenzen auf weitere Mitglieder der Liste einhält.
+	Hier sollen die Einfach-Verketteten-Listen und die Zweifach-Verketten-Listen
+	betrachten werden.
+	
+	\paragraph{Einfach-Verkettete-Listen}\mbox{} \\
+	
+	Einfach-Verkettete-Listen besitzen eine Referenz auf ihren Nachfolger.
+	Die Beziehung der einzelnen Elemente ist hierbei, dass jedes Element
+	seinen Nachfolger kennt, nicht aber seinen Vorgänger. Die Beziehungen
+	können also nur vorwärts verfolgt werden, das heißt von einem Element
+	Zum nachfolgenden, nicht aber von einem Element zum Vorherigen.
+	\autoref{fig:single_linked_list} skizziert dieses und zeigt mögliche
+	Operation an einer verketteten Liste. weitere Informationen können
+	der Erklärungen unter \cite{SLList} entnommen werden.
+	
+	\begin{figure}[H] 
+		\includegraphics[width=\linewidth]{../Bilder/single_linked_list.jpg}
+		\caption
+		{
+			Aufbau und Operation einer einfach verketteten Liste.
+			Quelle: \cite{SLList}
+		}
+		\label{fig:single_linked_list}
+	\end{figure}	
+	
+	\paragraph{Zweifach-Verkette-Listen}\mbox{} \\
+	
+	Zweifach-Verkette-Listen besitzen, gegenüber Einfach-Verkettete-Listen,
+	eine Referenz auf Vorgänger und Nachfolger. Die Beziehung der einzelnen
+	Elemente ist also, dass jedes Element seinen Vorgänger und Nachfolger
+	kennt. Somit kann die Liste vorwärts, von Element zum nachfolgenden
+	Element, als auch rückwärts, vom Element zum vorhergehenden Element
+	verfolgt werden. \autoref{fig:double_linked_list} skizziert dieses.
+	Weitere Informationen können den Erklörungen unter \cite{DLList} entnommen
+	werden.
+	
+	\begin{figure}[H] 
+		\includegraphics[width=\linewidth]{../Bilder/double_linked_list.jpg}
+		\caption
+		{
+			Aufbau einer zweifach verketteten Liste.
+			Quelle: \cite{DLList}
+		}
+		\label{fig:double_linked_list}
+	\end{figure}	
+	
+	\subsubsection{Bäume}
+	
+	Bäume (\cite{FundData}, Kapitel 4) bestehen aus einem Wurzelknoten
+	und weiteren Knoten, die von diesem ausgehen. Hierbei besteht eine Vater-Kind
+	Beziehung zwischen diesen. Die Wurzel besondere Eigenschaft der ist, dass
+	sie keinen Vater besitzt. Knoten, die keine Kinder besitzen, werden Blätter
+	genannt. Ein Element kann hier also beliebig vielen Unterelementen, seinen
+	Kindern, in Beziehung stehen. Hingegen kann ein Element von nur einem anderen
+	Element abstammen. \autoref{fig:double_linked_list} skizziert ein Beispiel
+	dieser Datenstruktur.
+	
+	\begin{figure}[H] 
+		\centerline{
+			\includegraphics{../Bilder/tree.jpg}
+		}
+		\caption
+		{
+			Aufbau eines Baums.
+			Quelle: \cite{Trees}
+		}
+		\label{fig:double_linked_list}
+	\end{figure}	
+	
+	\subsubsection{Ta­xo­no­mie}
+	
+	\newpage
 	
 	\section{Konzeption}	
 	
@@ -275,8 +480,9 @@
 	\newpage
 	
 	\section{Quellenverzeichnis}	
-	\printbibliography[type=online,heading=subbibliography,title={Webseiten}]
+	\printbibliography[type=book,heading=subbibliography,title={Bücher}]
 	\printbibliography[type=manual,heading=subbibliography,title={Handbücher}]
+	\printbibliography[type=online,heading=subbibliography,title={Webseiten}]
 	\newpage
 	
 	\section{Abbildungsverzeichnis}
