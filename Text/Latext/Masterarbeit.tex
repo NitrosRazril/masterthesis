@@ -11,7 +11,7 @@
 \usepackage{geometry}
 \usepackage{wallpaper}
 % may add sorting=nty later
-\usepackage[backend=bibtex]{biblatex}
+\usepackage[backend=bibtex,defernumbers=true]{biblatex}
 \usepackage{tocloft}
 \parindent0pt
 
@@ -25,15 +25,14 @@
 	footskip=12mm
 } 
 
-\defbibheading{head}{\section{Quellenverzeichnis}}
 \addbibresource{../Zitate/zitate.bib}
 
 \begin{document}
 
 	\begin{titlepage}
-		\topmargin12cm
+		\topmargin12cm 
 		\ULCornerWallPaper{1}{../Bilder/Header.jpeg}
-		\begin{flushright}	
+		\begin{flushright}
 			{\large Masterarbeit \\}
 			\begin{Large}
 				\textbf{
@@ -134,10 +133,10 @@
 	\section{Grundlagen}
 	
 	Das folgende Kapitel widmet sich den Grundlagen, auf denen die Arbeit
-	beruht. Zuerst werden die Funktionale und nicht funktionale Anforderungen
-	festgelegt, da diese die Basis der zu entwickelnden Softwarekomponente
-	darstellen. Anschließen wird auf das Shark Framework eingegangen, auf dem
-	diese Arbeit aufbaut.	
+	beruht. Neben den Funktionale und nicht funktionale Anforderungen
+	der zu entwickelnden Softwarekomponente werden Framesworks und Modelle
+	besprochen, die zur Entwicklung der Komponente und Umsetzung der Anfordern
+	genutzt werden können. 
 	
 	\subsection{Funktionale und nicht funktionale Anforderungen}
 	\label{sec:requirements}
@@ -152,7 +151,7 @@
 		\item \textbf{Beschreibbarkeit:} Es ist möglich einen Raum von
 		Daten zu beschreiben und diesen von einem anderen Raum
 		von Daten abzugrenzen. 
-		\item \textbf{Abhängigkeiten:} Es ist möglich Abhängigkeiten zwischen
+		\item \textbf{Beziehungen:} Es ist möglich Beziehungen zwischen
 		Räumen zu definieren. So soll beispielsweise der Raum Java-Chat ein 
 		Kind des Programmiersprachen-Chat Raumes sein können.
 		\item \textbf{Persistenz:} Es soll möglich sein die Beschreibung der
@@ -185,6 +184,9 @@
 		\item \textbf{Modultest:} Es existieren bereit eine Reihe von
 		Modultest, welche die grundlegende Funktionalität der 
 		Softwarekomponente sicherstellen.
+		\item \textbf{Wartbarkeit:} Der Code der Software soll wartbar sein.
+		Dies bedeutet der muss verständlich geschrieben sein und Fehler müsse
+		möglichst einfach aufspürbar sein.
 	\end{itemize} 
 	
 	\subsection{Shark Framework}
@@ -385,6 +387,7 @@
 	Objekt mit den vollständiges Daten erstellt und versandt.
 	
 	\subsection{Datenstrukturen zur Darstellung von Beziehungen}
+	\label{sec:datastruct}
 	
 	Wie in Abschnitt \ref{sec:requirements} beschrieben soll es möglich sein
 	Abhängigkeiten zwischen Räumen aufzustellen. Diese Abhängigkeiten stellen
@@ -430,7 +433,7 @@
 	kennt. Somit kann die Liste vorwärts, von Element zum nachfolgenden
 	Element, als auch rückwärts, vom Element zum vorhergehenden Element
 	verfolgt werden. \autoref{fig:double_linked_list} skizziert dieses.
-	Weitere Informationen können den Erklörungen unter \cite{DLList} entnommen
+	Weitere Informationen können den Erklärungen unter \cite{DLList} entnommen
 	werden.
 	
 	\begin{figure}[H] 
@@ -444,14 +447,14 @@
 	\end{figure}	
 	
 	\subsubsection{Bäume}
-	
+		
 	Bäume (\cite{FundData}, Kapitel 4) bestehen aus einem Wurzelknoten
 	und weiteren Knoten, die von diesem ausgehen. Hierbei besteht eine Vater-Kind
 	Beziehung zwischen diesen. Die Wurzel besondere Eigenschaft der ist, dass
 	sie keinen Vater besitzt. Knoten, die keine Kinder besitzen, werden Blätter
 	genannt. Ein Element kann hier also beliebig vielen Unterelementen, seinen
 	Kindern, in Beziehung stehen. Hingegen kann ein Element von nur einem anderen
-	Element abstammen. \autoref{fig:double_linked_list} skizziert ein Beispiel
+	Element abstammen. \autoref{fig:tree} skizziert ein Beispiel
 	dieser Datenstruktur.
 	
 	\begin{figure}[H] 
@@ -463,26 +466,493 @@
 			Aufbau eines Baums.
 			Quelle: \cite{Trees}
 		}
-		\label{fig:double_linked_list}
+		\label{fig:tree}
+	\end{figure}
+	
+	\subsubsection{Graphen}
+	
+	Graphen (siehe \cite{FundData}, Kapitel 6) bilden ein Netz von Daten. Dabei
+	kann von jedem Element eine Beziehung zu einem anderen ausgehen. Gegenüber
+	Bäumen besitzen sie keine Wurzel, der den Anfang darstellt. Zudem sind die
+	Beziehungen nicht fest gelegt. Ein Element besitzt eine Vielzahl an
+	Beziehungen. Gerichtet Graphen geben dieser Beziehung eine Richtung.
+	Somit kann allerdings nur angeben werden von welchem Element man zu welchen
+	gelangt und gegebenenfalls nicht mehr zurück. Dies ist ähnlicher dem 
+	Nachfolger Link in einer verketteten Liste und stellt nicht,
+	wie beim Baum, eine Vater Kind Beziehung da. Des Weiteren besteht die
+	Möglichkeit in gewichteten Graphen Metadaten, wie die Kosten für einen
+	Übergang von Element A zu Element B, den Richtungen mitzugeben. Dennoch bleibt
+	die Art wie zwei Elemente im Detail zueinander in Beziehung stehen	
+	umbeschrieben. \autoref{fig:graph} skizziert das Modell eines gerichteten
+	Graphen. Die Peile stellen dabei die Übergänge zwischen den Elementen da.
+	Weitere Erklärungen könne unter \cite{Graph} gefunden werden. 
+
+	\begin{figure}[H] 
+		\centerline{
+			\includegraphics{../Bilder/graph.jpg}
+		}
+		\caption{Aufbau eines Graphen. Quelle: \cite{Graph}}
+		\label{fig:graph}
+	\end{figure}
+	
+	\subsubsection{Entity Relationship Modell}
+	
+	Das Entity Relationship Modell, beschrieben in \cite{EntRel}, ist weniger
+	ein Datenstruktur als ein Modell zur Beschreibung von Zusammenhängen zwischen
+	Daten bekannt aus relationalen Datenbanksysteme. Damit beschriebt es aber
+	auch eine Beziehung und kann somit als Grundlage herangezogen werden. Die
+	Beziehungen basieren darauf, dass jede Element einen eindeutige 
+	Primärschlüssel besitzt. Datensätze, die mit anderen Datensätze in Beziehung 
+	stehen, besitzen einen Fremdschlüssel, welcher identisch zum Primärschlüssel
+	des Datensatzes ist, mit dem sie in Beziehung stehen. \autoref{fig:ent_rel}
+	zeigt eine vereinfachte Skizze dieser Beziehung auf. anders als die Abbildung
+	erscheinen lässt sind diese Schlüssel nicht an einen Datentypen gebunden. Auch
+	kann ein Schlüssel mehre Daten eines Datensatzes umfassen. Die Trennung
+	in Primärschlüssel und Fremdschlüssel erlaubt auch die Art der Beziehung zu
+	interpretieren. Beispielsweise kann dies eine Vater-Kind-Beziehung darstellen.
+	Das Modell ist aber nicht an diese Interpretation gebunden.
+	
+	\begin{figure}[H] 
+		\includegraphics[width=\linewidth]{../Bilder/ent_rel.jpg}
+		\caption{Vereinfachte Skizze des Entity Relationship Modell}
+		\label{fig:ent_rel}
 	\end{figure}	
 	
-	\subsubsection{Ta­xo­no­mie}
+	\subsection{Aufbau von Social Media Formaten}	
+	\label{sec:social}
 	
+	In diesem Abschnitt soll der Aufbaue eine Reihe von Social Media Formaten
+	beschrieben werden. Social Media Formaten sind dabei Anwendungen, die
+	den Kontakt mit anderen Menschen fördern. Die Verknüpfung der einzelnen
+	Informationen und Daten miteinander soll hierbei von besonderem Interesse sein,
+	da sie die Abhängigkeiten aus Abschnitt \ref{sec:requirements} darstellen.
+	
+	\subsubsection{Chat}	
+	
+	Chats sind einer der einfachsten Möglichkeiten der Kommunikation. Abbildung
+	\ref{fig:chat} zeigt den Aufbau eines Chat im Programm Skype.
+	
+	\begin{figure}[H] 
+		\includegraphics[width=\linewidth]{../Bilder/chat.jpg}
+		\caption{Aufbau Chat in Skype. \cite{chat}}
+		\label{fig:chat}
+	\end{figure}		
+	
+	Die Aufteilung erfolgt hier in erster Ebene(1) in Gruppen. In zweiter Ebene(2)
+	ist der eigentliche Chat. Ein Chat besitzt eine Vielzahl von Daten. Ein
+	Eintrag einhält beispielsweise einen Zeitstempel, Text und Autor der
+	Nachricht. Der Chat selbst erscheint identifizierbar durch einen nicht
+	sichtbaren Identifikator, da Elemente wie Teilnehmer geändert werden können
+	und der Chat trotzdem auffindbar ist. Vereinfacht kann man sagen, dass ein
+	Chat eine einzelner Raum von Informationen ist, der auf eine bestimmte Art
+	durch einen oder mehre Identifikatoren beschrieben sind.
+	
+	\subsubsection{Forum}	
+	
+	Ein Forum ist gegenüber den Chat meist komplexer und lässt sich in mehr
+	Ebenen einteilen. Als Beispiel soll das	Burning Board der WoltLab GmbH
+	herangezogen werden \cite{BB}. In den folgende Abbildungen
+	\ref{fig:forumstruc001}, \ref{fig:forumstruc002} und \ref{fig:forumstruc003}
+	ist der strukturelle Aufbau eines Forums zu sehen.
+	
+	\begin{figure}[H] 
+		\centerline{
+			\includegraphics[scale=0.65]{../Bilder/forumstruc001.jpg}
+		}
+		\caption{Forumstruktur: Oberste Ebene. Quelle: \cite{BB}}
+		\label{fig:forumstruc001}
+	\end{figure}	
+	
+	\autoref{fig:forumstruc001} zeigt die oberste Ebene eines Forums. Man sieht
+	eine Baumstruktur mit einer Wurzel(1). Von diesem Baum gehen Äste(2) aus
+	von welchem wiederum weitere Äste(3) ausgehen können.
+	
+	\begin{figure}[H] 
+		\centerline{
+			\includegraphics{../Bilder/forumstruc002.jpg}
+		}
+		\caption{Forumstruktur: Thread-Sammlung Ebene. Quelle: \cite{BB}}
+		\label{fig:forumstruc002}
+	\end{figure}	
+	
+	\autoref{fig:forumstruc02} zeigt die Ebene, in der die Threads mit den
+	Inhalten zu finden sind. Man sieht, dass es sich hierbei um einen Konten(1)
+	in der zuvor erwähnten Baumstruktur handelt. Die einzelnen Threads(2) stellen
+	dabei die Blätter des Baumes da.
+		
+	\begin{figure}[H] 
+		\centerline{
+			\includegraphics[scale=0.6]{../Bilder/forumstruc003.jpg}
+		}
+		\caption{Forumstruktur: Thread Ebene. Quelle: \cite{BB}}
+		\label{fig:forumstruc003}
+	\end{figure}	
+	
+	\autoref{fig:forumstruc003} zeigt einen Thread in einem Forum. Dieser ist
+	ein Blatt(1) in der Baumstruktur. Ähnlich wie der Chat ist ein Thread ein
+	Raum von Daten. Die einzelnen Einträge(3, 4) besitzen dabei genauso 
+	ähnliche Daten,	wie zum Beispiel Zeitstempel, Text und Autor(2). \\
+	
+	Trotz des unterschiedlichen Layouts der grafischen Oberfläche besitzen
+	Threads und Chat eine Vielzahl von Gemeinsamkeiten in ihrem Aufbau. Der
+	größte Unterschied ist, dass Foren sich einer Baumstruktur bedienen um
+	die einzelnen Raume von Daten anderen Räumen unterzuordnen. Dies kann
+	als Vater-Kind-Beziehung eines Baumes gesehen werden, wobei nur die Blätter
+	Daten enthalten. Andere Knoten dienen lediglich einer Ordnung der Daten und 
+	der Eingruppierung dieser in einen definierten Bereich.
+	
+	\subsubsection{Dateisysteme und Versionsverwaltung Software}	
+	
+	Es mag auf den ersten Blick nicht so erscheinen, aber auch Dateien auf
+	dem Dateisystem können für soziale Kontakte genutzt werden. Ein einfaches
+	Beispiel hierfür ist die Existenz der die vielen Image-Hoster. Auch 
+	Facebook und Instagram erlauben den Austausch von Bildern. \\
+	
+	In diesem Sinne kann auch Versionsverwaltung Software wie Git oder SVN als
+	eine Art des sozialen Kontaktes gesehen werden. In einem Online Artikel der
+	t3n \cite{articleGitHub} wird beschrieben, dass man immer mehr auf den
+	webbasierter Filehosting-Dienst für Software-Entwicklungsprojekte GitHub
+	\cite{gitHub} stößt, der auf Git basiert. Mit seiner Vielzahl an Projekten
+	der unterschiedlichsten Programmiersprachen kann GitHub als soziale Plattform
+	für Softwareentwickler gesehen werden. \\
+	
+	Aus diesem soll der Austausch von Teilen des Software über solche 
+	Versionsverwaltung Software auch Betrachtung finden. \autoref{fig:filesytsem}
+	zeigt den Allgemeinen von Dateisystem für unterschiedliche Betriebssysteme.
+	
+	\begin{figure}[H] 
+		\includegraphics[width=\linewidth]{../Bilder/filesystem.png}
+		\caption{
+			Illustration über den Vergleich von Dateisystem-Bäumen.
+			Quelle: \cite{filesytsem}
+		}
+		\label{fig:filesytsem}
+	\end{figure}
+	
+	Zu sehen ist, das identisch zum Forum eine Baumstruktur die Grundlage von
+	Dateisystemen ist. Ebenfalls einhalten auch hier nur die Blätter die
+	die eigentlichen Daten und die anderen Knoten diene lediglich
+	der Eingruppierung von Daten. Die Blätter selbst können als ein einzelnes
+	Element bestehend aus Bytes angereichert mit Metadaten gesehen werden.
+	Dies unterscheidet sich zum Chat oder Forum, wo ein Blatt einem beschreibbarem
+	Raum von Daten bestand. 
+		
 	\newpage
 	
 	\section{Konzeption}	
 	
-	\subsection{Ein erweiterter Kontext}
+	In diesem Abschnitt wird die Konzeption der geplanten Softwarekomponente
+	besprochen. Basierend den Grundlagen des vorherigen Kapitels wird eine
+	Auswahl getroffen und Techniken zur Implementieren gewählt.
 	
-	Die Context Spache aus dem Kapitel \ref{sec:CS} ist für unsere Anforderungen
-	nicht ausreichend.
+	\subsection{Serialisierung}
+	
+	Eine der Anforderungen aus dem Abschnitt \ref{sec:requirements} war Persistenz.
+	Es sollte möglich sein eine Beschreibung eines Raumes zu speichern und später
+	wieder abrufen zu können. Zu diesem Zweck macht es Sinn das Feature des Setzen
+	von Properties an einer Wissensbasis zu nutzen. Auf diesem Weg kann je 
+	Wissensbasis eine Liste von Beschreibungen gespeichert werden. Insbesondere
+	kann dies als Zugrodung dieser Beschreibungen zur entsprechenden Wissensbasis
+	gesehen werden. \\
+	
+	Dazu benötigen wir eine Technik, welche die Serialisierung eines Objektes einer
+	Programmiersprache, in diesem Fall Java, in eine Zeichenkette ermöglicht. Um
+	die Anforderung der Wartbarkeit zu gewährleisten soll hier ein menschlich
+	lesbares Format gewählt werden, dass von den meisten Entwicklern verstanden
+	wird. XML und JSON erfüllen diese Anfordern. Zum Vergleich sollen die
+	Ergebnisse aus der Fallstudie \cite{XmlJson} zu rate gezogen. Diese in den
+	folgenden Abbildungen dargestellt.
+	
+	\begin{figure}[H] 
+		\includegraphics[width=\linewidth]{../Bilder/xml_json_time_sen1.jpg}
+		\caption{Scenario 1 JSON vs. XML Timing. Quelle: \cite{XmlJson}}
+		\label{fig:xml_json_time_sen1}
+	\end{figure}
+	
+	\begin{figure}[H] 
+		\includegraphics[width=\linewidth]{../Bilder/xml_json_mem_sen1.jpg}
+		\caption{Scenario 1 JSON vs. XML CPU/Mem. Quelle: \cite{XmlJson}}
+		\label{fig:xml_json_mem_sen1}
+	\end{figure}
+	
+	\newpage
+	
+	Die Abbildungen \ref{fig:xml_json_time_sen1} und \ref{fig:xml_json_mem_sen1}
+	zeigen den ersten Fall der Fallstudie. Hier wurde eine große Menge an Daten
+	über einen Kommunikationskanal gesendet. Es ist klar ersichtlich, dass JSON
+	in den Bereichen Timing und CPU/Memory eine bessere Qualität aufzeigt. Einzig
+	bei der Nutzung der CPU des Nutzers zeigt XML bessere Werte auf.
+	
+	\begin{figure}[H] 
+		\centerline{
+			\includegraphics[scale=0.8]{../Bilder/xml_json_time_sen2.jpg}
+		}
+		\caption{Scenario 2 JSON Vs XML Timing. Quelle: \cite{XmlJson}}
+		\label{fig:xml_json_time_sen2}
+	\end{figure}
+	
+	\begin{figure}[H] 
+		\includegraphics[width=\linewidth]{../Bilder/json_mem_sen2.jpg}
+		\caption{Scenario 2 JSON CPU/Mem. Quelle: \cite{XmlJson}}
+		\label{fig:json_mem_sen2}
+	\end{figure}
+	
+	\begin{figure}[H] 
+		\includegraphics[width=\linewidth]{../Bilder/xml_mem_sen2.jpg}
+		\caption{Scenario 2 XML CPU/Mem. Quelle: \cite{XmlJson}}
+		\label{fig:xml_mem_sen2}
+	\end{figure}
+	
+	Die Abbildungen \ref{fig:xml_json_time_sen2}, \ref{fig:json_mem_sen2}
+	und \ref{fig:xml_mem_sen2} zeigen den Zweiten Fall der Fallstudie. Hier
+	wurden mehrfach hintereinander kleine Datensatze überragen anstatt alle
+	Datenobjekte in einer Übertragung zu senden. Auch hier zeigt sich, dass
+	JSON im allgemeinen bessere Werte liefert. Nur bei der Nutzung der CPU des
+	Nutzers zeigt XML, wie im ersten Fall, bessere Werte auf. \\
+	 
+	Mit den vorliegenden Daten würde die Wahl normalerweise auf JSON fallen.
+	Allerdings handelt es sich bei der zu entwickelnden Softwarekomponente um
+	einen Teil eines Frameworks, was eine gesonderte Sichtweise erfordert. 
+	
+	\begin{itemize}
+		\item \textbf{Abhängigkeiten:} Umgangssprachlich gibt es den Begriff der
+		"Jar-Hölle". Dies beschriebt, dass Frameworks ihre Abhängigkeiten, in der
+		Form von Jar-Archiven, mitbringen und dadurch die Möglichkeit besteht diese
+		mehrfach in einem Projekt zu haben. Dies erhöht den Speicherbedarf einer
+		Applikation unnötig. Auf der anderen Seite kann es passieren, dass keine
+		Abhängigkeiten mitgebracht werden und  von Entwickler eigenständig
+		hinzugefügt werden müssen. Dies erfordert einen ausdrückliche Hinweis in
+		der Dokumentation, wobei nicht sichergestellt werden kann, ob dieser
+		gelesen	wird. Zwar kann dieses durch das Nutzen eines Tools wie Maven
+		verhindert werden, allerdings nutzt das Shark Framework diese Tool nicht.
+		Insofern ist interessant, dass Java von Hause aus XML unterstützt mit JAXB.
+		JSON hingegen erfordert das einbinden eines zusätzlichen Frameworks.
+		\item \textbf{Einheitlichkeit:} Das Shark Frameworks benutzt bereits eine
+		XML Repräsentation an vielen Stellen. Ein Mix von XML und JSON bei der
+		Benutzung dies kann durchaus verwirrend für Entwickler sein. Besonders,
+		im Bezug auf die Weiterentwicklung des Frameworks. Die zur Zeit prioritäre
+		XML Serialisierung sollte einfacher auf das in Java Standard Edition
+		enthaltene JAXB umzustellen sein als auf ein externes Framework für JSON.
+		Sofern dies in bei zukünftigen Refactoring Aktionen geschieht.
+		\item \textbf{XML Schema beschrieben:} XML bietet die Möglichkeit den
+		Aufbau der XML Datei über XML-Shema und DDTs zu beschreiben. Dadurch
+		können XML-Parser erkennen, ob ein XML-Dokument valide ist. JSON fehlt
+		diese Möglichkeit. Im Sinne der Wartbarkeit ist dies ein Feature, dass
+		zukünftig an Bedeutung gewinne könnte. Speziell das Shark Framework
+		aus einer Vielzahl komplexer Objekten besteht, die beim Datenaustausch
+		Versand werden.
+	\end{itemize} 	
+	
+	Wegen dieser Aspekten, insbesondere dem Punkt Abhängigkeiten, soll hier die
+	Darstellung in XML erfolgen.
+	
+	\subsection{Darstellung eines Datenbereiches}
+	
+	In diesem Abschnitt wird besprochen, wie ein Datenbereiches dargestellt werde
+	soll. Dazu betrachten wir die Datenstrukturen aus Abschnitt
+	\ref{sec:datastruct} und den Aufbau von Social Media Formaten aus Abschnitt
+	\ref{sec:social}. Interessant dabei ist inwiefern sie zur Implementierung der
+	Beschreibung des Datenbereiches genutzt werden können, sodass eine Struktur
+	ähnlich der Social Media Formate erreicht werde kann. Auch inwiefern
+	diese zu XML serialisiert werden können findet dabei Betrachtung.
+	
+	
+	\subsubsection{Analyse der Datenstrukturen}
+	
+	Im folgenden die Analyse der in  Abschnitt \ref{sec:datastruct} beschrieben
+	Datenstrukturen im Bezug auf die in Abschnitt \ref{sec:social} genannten
+	Social Media Formate.
+	
+	\paragraph{Verkettete-Listen}\mbox{} \\
+	
+	Verkettete-Listen erlauben das darstellen einer Vater-Kind Beziehung. Bei
+	Zweifach-Verkette-Listen könnte hier vorwärts und rückwärts nach Element
+	gesucht werden. Serialisiert wären sie in XML durch eine einfache Liste
+	mit einer vorgeben festen Reihenfolge. Das bedeutet, jedes Element müsste
+	im XML in der Reihenfolge erscheinen, wie es in der Liste gespeichert ist. \\
+	
+	Verkettete-Listen Listen haben allerdings den Nachteil, dass je nur ein
+	Vorgänger und Nachfolger definiert werden kann. Daher eigen sie sich weniger
+	für die Darstellung der Baumstruktur eines Forums oder eines Teil des
+	Dateisystems. 	
+	
+	\paragraph{Bäume}\mbox{} \\
+	
+	Die meisten der besprochenen Social Media Formaten haben von Grund eine
+	Baumstruktur. Daher lassen sie sich ohne größere Probleme auch als ein
+	Solcher darstellen. Da XML ebenfalls eine Baumstruktur besitzt, über
+	die Tags als Subtags anderer Tags dargestellt werden können, ist auch
+	die Serialisierung in dieses Format kein Problem. \\
+	
+	Problematisch hingegn ist die Tatsache, dass in der Programmiersprache 
+	Java, in welcher die Softwarekomponente geschrieben wird, keine vorgefertigte
+	Datenstuck hier	enthält.
+	
+	\paragraph{Graphen}\mbox{} \\
+	
+	Bäume sind prinzipiell eine besondere Art von Graphen. Daher lassen sich
+	die Social Media Formaten auch als diese Darstellen. Problematisch
+	könnte hierbei sein, die Wege von einem Knoten zu einem anderen zu
+	serialisieren. Dabei kann es sehr einfach zu doppelter Datenhaltung kommen. \\
+	
+	Allgemein wären Graphen zu weit gefasst. Kosten für die Wege sind nicht
+	ausschlaggebend für die Beschreibung einer Beziehung. Auch kann angenommen
+	werden, dass man von einem Vater immer zu seinem Kindern kommt und das Kind
+	immer seinen Vater kennt. Bäume sind für diese ausreicht, besonders da diese
+	einen Startpunkt, die Wurzel, besitzen.
+	
+	\paragraph{Entity Relationship Modell}\mbox{} \\
+	
+	Auch wenn eher ein Modell als eine Dateistruktur, so ist ein Element im
+	Entity Relationship Modell eindeutig durch seinen Primärschlüssel beschrieben.
+	Eine Beziehung zu einem anderen lässt sich hier einfach durch einen
+	Fremdschlüssel reichen. Dies ermöglicht die Flexibilität, dass ein Element
+	sehr leicht mehre Kinder und Väter haben. Auch als 1:1, 1:N. N:M Beziehung
+	aus Datenbanksystemen bekommt. Viele Elemente der Social Media Formaten sind
+	durch einen Identifikator identifizierbar. Beipeilweise kann ein Thread eines
+	Forums einen numerischen Identifikator besitzen. Dieser kann bei der bei der
+	URL Generierung	genutzt wird, um eine eindeutige URL zu erzeugen. Daher sollte
+	es auch möglich sein diesen Identifikator zur Identifikation eines Raumes zu
+	nutzen. Auf übergeordnete Elemente kann mittels des Fremdschlüssel ebenfalls
+	einfach verwiesen werden. Beziehungen daher, entsprechen des Namens des
+	Modells, leicht abzubilden.	Wenn es bei besagtem Identifikator um einen
+	primitiven Datentypen oder eine Zeichenkette handelt, so ist die
+	Serialisierung nur ein zusätzliches Tag im XML mit ihm als Inhalt. \\
+	
+	Problematisch ist, dass die einzelnen Beziehungen programmatisch zusammen
+	gesetzt werden müssen. Wir haben im Rahmen dieser Arbeit keine relationale
+	Datenbank mit einem Datenbanksystem, welche des für uns übernehmen könne.
+	
+	\paragraph{Auswertung}\mbox{} \\
+	
+	Da die beschriebenen Social Media Formate bereits eine eine baumartige Struktur
+	aufweisen ist es sinnvoll auch die Datenstruktur eines Baumes zu nutzen. Um
+	die eigentlichen Vater-Kind Beziehungen darzustellen kann das Prinzip des
+	Entity Relationship Modell aus Datenbanken verwendet werden. Dies ermöglicht
+	einen Identifikator für einen Raum zu definieren, anhand dessen er wieder
+	auffindbar ist. Serialisiert kann das ganze so als eine Liste werden, wobei
+	jeder Identifikator nur einmal vorkommt.
+	
+	\subsubsection{Beschreibung eines Datenbereiches durch einen Deskriptoren}
+	
+	Nach der Analyse aus dem vorhergehenden Abschnitt soll nun festgelegt werden
+	mit welchen Parametern die ein Datenbereiches beschrieben wird.
+	\autoref{fig:descriptor} zeigt den Aufbau unseres beschreibenden Elements, dem
+	Deskriptor.
+	
+	\begin{figure}[H] 
+		\centerline{
+			\includegraphics{../Bilder/descriptor.jpg}
+		}
+		\caption{Konzeption eines Deskriptor}
+		\label{fig:descriptor}
+	\end{figure}
+	
+	Dieses Element soll Deskriptor genannt werden. Es besitzt die folgenden
+	Parameter:
+	
+	\begin{itemize}
+		\item \textbf{Kontext (context):} Der Kontext ist der Kern des Deskriptor.
+		Er bestimmt, welche Kontextpunkte durch ihn aus der Wissensbasis extrahiert
+		werden können. Dabei ist es allerdings auch möglich ihm keine Bedeutung 
+		zuordnen. Dies ist möglich, wenn der Deskriptor zur	Beschreibung einer
+		Beziehung benetzt wird, beispielsweise eines Ordners in einem Dateisystem.
+		dabei ist dann nur interessant, welche Kinder dieser besitzt, nicht aber
+		die Kontextpunkte, die er beschreibt.
+		\item \textbf{Identifikator (id):} Der Identifikator ist ein Teil des
+		Paares, welche die Vater-Kind Beziehung ermöglicht. Des weiteren
+		ermöglicht er das wieder auffinden eines bestimmten Deskriptor aus einer
+		Liste von Deskriptoren.
+		\item \textbf{Vater (parent):} Der Vater ist der andere Teil des Paares,
+		welche die Vater-Kind Beziehung ermöglicht. Er erlaubt das Aufwinden des
+		Vaters eines Deskriptor. Ebenfalls kann so ein Deskriptor nach seinen
+		Kindern	suchen.
+	\end{itemize} 	
+	
+	Man beachte, dass Identifikator und Vater Zeichenketten sind statt, wie
+	oft übliche, numerische Werte. Es ist geplant, dass der jeweilige Entwickler
+	dafür zuständig ist einen Identifikator zu definieren. Dieser sollte daher
+	für Menschen lesbar und interpretierbar sein. Ein Identifikator für einen
+	Chat könnte zum Beispiel einfach Chat genannt werden. Oder es könnte sich um
+	einen Subject Identifier des Topic Maps Modells sein, dem sich das Shark
+	Framework bedient. \\
+	
+	Hierbei sei angemerkt, dass es sich trotzdem um eine technische Identifikator,
+	der von Maschinen und nicht Menschen verwendet wird, handelt. Die Darstellung
+	als Zeichenkette dient jegliche als Vereinfachung. Somit ist eine größere
+	Auswahl an zu erstellenden Identifikatoren möglich und zeigt Synergien 
+	mit dem Topic Maps Modells des Shark Framework auf, da die Subject Identifier
+	ein Array von Zeichenketten sind. \\
+	
+	Des weiteren werden die Väter eines Elements vorerst auf einen Knoten,
+	wie in einem einem Baum üblich, beschränkt. Dies kann in diesem Modell später,
+	wenn die Notwendigkeit dieser Komplexität besteht, durch das Austauschen des
+	parent Parameters durch eine Liste von Zeichenketten auf mehre Väter erweitert
+	werden.
+	
+	\subsubsection{Gleichheit von Deskriptoren}
+	
+	Mit der Einführung eines Identifikators für Deskriptoren besitzen
+	diese nun zwei Definitionen von Gleichheit. Die Unterscheidung soll sein,
+	dass ein Deskriptor einem Anderen \emph{gleicht} und ein Deskriptor zu
+	einem Anderen \emph{identisch} ist.
+	
+	\begin{itemize}
+		\item \textbf{Ein Deskriptor \emph{gleicht} einem Anderen:} Deskriptor
+		sind gleich, wenn ihre Identifikatoren gleich sind. Das heißt, die
+		Zeichenketten müssen übereinstimmten.
+		\item \textbf{Ein Deskriptor ist \emph{identisch} zu einem Anderen:}
+		Deskriptor sind identisch zueinander, wenn alle ihre Elemente glich sind.
+		Das heißt, die Zeichenketten des Identifikator und Vater müssen mit denen,
+		eines anderen Deskriptor übereinstimmten. Des Weiteren muss der Kontext,
+		nach Regeln des Shark Frameworks, identisch sein.
+	\end{itemize} 	
+	
+	Diese Unterscheidung ist notwendig, um das wiederzufinden eines Deskriptor
+	sicher zu stellen und doppelte Datenhalten zu verhindern, da der Identifikator
+	einen Primärschlüssel darstellt. Anhand dessen kann nach einem bestimmten
+	Deskriptor gesucht werde. dennoch muss es möglich sein den Unterschied in
+	Vater und Kontext zu erkennen für mögliche Anpassungen. Zum Beispiel könnte
+	der Deskriptor von einem anderen Peer geändert worden seien und wurde dann
+	versendet, damit sich alle anderen Peers synchronisieren können. In diesem
+	Fallbeispiel ist es nötigen, dass der Deskriptor anhand seines Identifikators
+	gefunden wird und eine Überprüfung stattfindet, ob dieser angepasst werden
+	muss. \\
+	
+	Geplant ist die Umsetzung für Gleichheit anhand der equals-Methode die ein
+	jedes Java-Objekt von Object erbt. Viele Methoden der Collection-API basieren
+	darauf, wie beispielsweise die Aussage, ob eine Liste ein bestimmtes Objekt
+	einhält. Ob ein Deskriptor zu einem Anderen identisch ist soll anhand einer
+	gesonderten Methode implementiert werden.
+	
+	\subsubsection{Darstellung und Bedeutung von Beziehungen}
+	
+	In diesem Abschnitt wird genauer auf die Darstellung und Bedeutung von 
+	Beziehungen zwischen Datenbereichen eingegangen. Die grundlegende
+	Eigenschaften, die einem Deskriptor ermöglichen eine Beziehung darzustellen,
+	wurde bereits im vorhergehenden Abschnitt erklärt. Das Grundprinzip ist eine
+	Selbstreferenz, die in \autoref{fig:selfref} dargestellt ist.
+	
+	\begin{figure}[H] 
+		\centerline{
+			\includegraphics[scale=0.8]{../Bilder/selfref.jpg}
+		}
+		\caption{Skizze: Selbstreferenz}
+		\label{fig:selfref}
+	\end{figure}
+	
+	Dies ermöglicht...
 	
 	\newpage
 	
 	\section{Quellenverzeichnis}	
+	
+	\printbibliography[type=article,heading=subbibliography,title={Artikel}]
 	\printbibliography[type=book,heading=subbibliography,title={Bücher}]
 	\printbibliography[type=manual,heading=subbibliography,title={Handbücher}]
+	\printbibliography[type=misc,heading=subbibliography,title={Publikationen}]
 	\printbibliography[type=online,heading=subbibliography,title={Webseiten}]
+
 	\newpage
 	
 	\section{Abbildungsverzeichnis}
