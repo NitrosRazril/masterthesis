@@ -857,6 +857,7 @@
 	jeder Identifikator nur einmal vorkommt.
 	
 	\subsubsection{Beschreibung eines Datenbereiches durch einen Deskriptoren}
+	\label{sec:desk}
 	
 	Nach der Analyse aus dem vorhergehenden Abschnitt soll nun festgelegt werden
 	mit welchen Parametern die ein Datenbereiches beschrieben wird.
@@ -1189,11 +1190,126 @@
 		
 	\paragraph{Deskriptor}\mbox{} \\
 	
+	Die Klasse ContextSpaceDescriptor hat die aus Abschnitt \ref{sec:desk} 
+	beschrieben drei Parameter Kontext(context), Vater(parent) und
+	Identifikator(id). Für dieses Methoden gibt es jeweils Setter und Getter
+	Methoden. Zu beachten dabei ist, dass der Setter für den Vater auf die
+	Sichtbarkeit protected gesetzt ist. Der Entwickler soll die	Vater-Kind
+	Beziehungen über das Schema konfigurieren, welche Fehlerprüfungen durchführt,
+	nicht über die Klasse ContextSpaceDescriptor selbst. Das der Getter für
+	parent die Sichtbarkeit public besitzt dient nur zu Debugging und Logging
+	Zwecken.\\
+	
+	Des Weiteren gibt es eine Reihe von Methoden, welche folgende Eigenschaften
+	prüfen:
+	
+	\begin{itemize}
+		\item \textbf{Leere:} Die isEmpty Methode prüft ob ein Deskriptor
+		leer ist. Ein Deskriptor ist leer, wenn der Parameter context null ist.
+		\item \textbf{Zwei Deskriptoren sind gleich:} Die von Object überschieben
+		equals Methode pürft ob zwei Deskriptoren gleich sind. Ein Deskriptor
+		gleicht einem anderen, wenn die Parameter id gleich sind. Mit dieser
+		Prüfung	auf Gleichheit werden Features des Collection Framesworks genutzt
+		von Java genutzt. Die contains Methode zum Beispiel gibt so wieder ob
+		in einer Collection bereits ein Deskriptor mit dem gleichen Identifikator
+		existiert. Zusätzlich ist auch die hashSet Methode überschrieben. Das
+		ausschlaggebende Element ist auch hier der Parameter id. Demzufolge
+		ist auch der Hash zweier Deskriptoren gleich, wenn ihr Identifikator 
+		gleich ist.
+		\item \textbf{Zwei Deskriptoren sind identisch:} Die identical Methode
+		prüft ob ein Deskriptor identisch zu eine anderen Deskriptor ist. Dies
+		ist der Fall, wenn Die Parameter id und parent die Gleicheit aufweisen,
+		sowie die context Parameter identisch sind nach den Regeln des Shark
+		Frameworks. Somit können Deskriptoren auf Untershcide in überprüft werden,
+		obwohl sie den gleiche Identifikator besitzen.
+	\end{itemize}
+	
 	\paragraph{Schema}\mbox{} \\
 	
-	\subsection{Serialisierung von Deskriptor und Schema}
+	Die Klasse DescriptorSchema ermöglicht sowohl das Speichern, wie auch das
+	Laden von Deskriptoren aus der Wissensbasis als auch der konfigurieren von
+	Beziehungen	zwischen Deskriptoren. Nach außen ist sie die Klasse, welche
+	die Beziehungen enthält, auch wenn die Schlüssel intern an der Klasse
+	ContextSpaceDescriptor beschrieben sind. Sie kann ähnlich einem 
+	Datenbankmanagementsystem gesehen werden. \\
 	
-	Wie in Abschnitt \ref{sec:konz_serialisierung}
+	Ein Schema basiert immer auf einen Wissensbasis, aus der die Daten geladen und
+	gespeichert werden. Des weiteren besitzt sie folgende Features:
+	
+	\begin{itemize}
+		\item \textbf{Speichern und Laden von Deskriptoren:} Deskriptoren können
+		an der Wissensbasis, die das Schema verwendet, gespeichert werden und.
+		geladen werden. Hierzu einhält die Klasse die Methoden getDescriptor,
+		getDescriptors, saveDescriptor, saveDescriptors, removeDescriptor und
+		saveDescriptors. Das löschen des gesamten Schemas ist mittels 
+		clearDescriptors möglich. Deskriptoren werden immer in einem Set gehalten,
+		das heißt alle Elemente der Liste sind unterschiedlich. Unterschiedlich
+		bezieht sich hierbei die Gleichheit, das heißt sie besitzen alle
+		unterschiedliche Identifikatoren. Das Speichern eines Deskriptor mit dem
+		gleichen Identifikator wie ein bereits existierender Deskriptor
+		überschriebt kommt einem Überschrieben gleich.
+		\item \textbf{Konfigurieren von Vater-Kind Beziehungen:} Über die Methoden 
+		addChild, addChildren, setParent können Vater-Kind Beziehungen aufgebaut
+		werden. Zu beachten ist, dass ein Deskriptor immer nur einen Vater
+		haben kann. Wird ein neue gesetzt, so wird der Alte überschrieben. Das
+		hinzufügen eines Kindes zu einem Deskriptor ist gleich dem Setzen eines 
+		Vaters (Parameter: descriptor) für den Parameter child. Existiert ein
+		Deskriptor nicht im Schema oder würde das Hinzufügen zu einer
+		Schleife führen, also die Baumstatur verletzen, so erzeugt dies einen
+		Fehler.	Ein Vater kann über die clearParent Methode gelöscht werden. Über
+		die getChildren	und getParent können Vater und Kinder eines Deskriptor
+		erhalten werden.
+	\end{itemize}
+	
+	\subsection{Serialisierung des Schemas}
+	
+	Wie in Abschnitt \ref{sec:konz_serialisierung} erklärt soll XML unter
+	Zuhilfenahme das im Java Development Kit enthalten JAXB zum Serialisieren
+	des Schemas verwendet werden. Hierzu sind die Klasse ContextSpaceDescriptor
+	über entspreche	Annotations ausgestattet. Für den Parameter context wurde
+	eine entsprechender XmlAdapter (siehe \cite{XmlAdapter}) geschrieben, der
+	die Serialisierung einer SharkCS Klasse unter Zuhilfenahme der im Shark
+	Framework existierenden Klasse XMLSerializer für JAXB ermöglicht. \\
+	
+	Aufgrund der Annotations wurde auch drauf verzichtet ein Interface zur Klasse
+	ContextSpaceDescriptor zu erstellen oder sie abstrakt zu gestalten. Sie wurde
+	als normales Java Objekt entworfen das einfach wie eine Java-Bean genutzt
+	werden kann. \\
+	
+	In in der JAXB 2.2 Specification, Section 4.2 JAXB Context \cite{JAXB} steht
+	folgendes beschrieben: 
+	
+	\emph{
+		\begin{quote} 
+			"To avoid the overhead involved in creating a JAXBContext instance,
+			a JAXB application is encouraged to reuse a JAXBContext instance."
+		\end{quote}
+	}
+	
+	Aus diesem Grund wurde das Factory Pattern für die Erstellung eines JAXBContext
+	benutzt. \autoref{fig:factory} skizziert dieses.
+	
+	\begin{figure}[H]
+		\includegraphics[width=\linewidth]{../Bilder/factory.jpg}
+		\caption{Skizze: Factroy Pattern für JAXB Serialisierung}
+		\label{fig:factory}
+	\end{figure}	
+	
+	Der JAXBContext ist in der Klasse JAXBSerializer enthalten. Für jede Instanz
+	dieser Klasse wird ein einer JAXBContext angelegt. Um dies zu verhindern wird
+	die Factory Klasse SerializerFactroy benutzt. Diese folgt dem Singleton Pattern
+	und enhält genau einen JAXBSerializer der für Deskriptoren konfiguriert ist. 
+	Das Schema kann an diesen über eine Methode abrufen. Sollten weitere Klassen
+	einen einen JAXBSerializer für Deskriptoren benötigen, so kann die Instanz 
+	über SerializerFactroy wiederverwendet werden. Somit wird auch der JAXBContext
+	wiederverwendet und Overhead vermeiden.
+	
+	\newpage
+	\section{Tests}
+	
+	\newpage
+	\section{Fazit}
+	
 	
 	\newpage
 	\section{Quellenverzeichnis}	
@@ -1201,7 +1317,7 @@
 	\printbibliography[type=article,heading=subbibliography,title={Artikel}]
 	\printbibliography[type=book,heading=subbibliography,title={Bücher}]
 	\printbibliography[type=manual,heading=subbibliography,title={Handbücher}]
-	\printbibliography[type=misc,heading=subbibliography,title={Publikationen}]
+	\printbibliography[type=misc,heading=subbibliography,title={Publikationen}] 			\printbibliography[type=report,heading=subbibliography,title={Spezifikationen}]
 	\printbibliography[type=online,heading=subbibliography,title={Webseiten}]
 
 	\newpage
