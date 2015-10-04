@@ -297,7 +297,8 @@
 	ein Interesse versandt wird und Daten in der Form eines Knowledge Objektes
 	gesendet werden.
 	
-	\subsubsection{SyncKB} 
+	\subsubsection{SyncKB}
+	\label{sec:SyncKB}
 	
 	Leider gibt es, abgesehen der Javadoc Dokumentation, keine genaue
 	Beschreibung der Funktionsweise der SyncKB. Daher soll hier auf die
@@ -646,6 +647,7 @@
 	Auswahl getroffen und Techniken zur Implementieren gewählt.
 	
 	\subsection{Serialisierung}
+	\label{sec:konz_serialisierung}
 	
 	Eine der Anforderungen aus dem Abschnitt \ref{sec:requirements} war Persistenz.
 	Es sollte möglich sein eine Beschreibung eines Raumes zu speichern und später
@@ -741,12 +743,32 @@
 		zukünftig an Bedeutung gewinne könnte. Speziell das Shark Framework
 		aus einer Vielzahl komplexer Objekten besteht, die beim Datenaustausch
 		Versand werden.
+		\item \textbf{sun.misc.Unsafe:} Wie ein Artikel auf JAXenter \cite{unsafe}
+		beschreibt plante Oracle ursprünglich für Java 9 die Entfernung von
+		sun.misc.Unsafe. Diese wird dennoch von vielen Frameworks genutzt. Da
+		JAXB Bestandteil des normalen Java Development Kit von Oracle ist sind
+		hier, gegenüber der Verwendung von Frameworks Dritter, keine Probleme zu
+		erwarten.
+		
 	\end{itemize} 	
 	
 	Wegen dieser Aspekten, insbesondere dem Punkt Abhängigkeiten, soll hier die
 	Darstellung in XML erfolgen.
 	
-	\subsection{Darstellung eines Datenbereiches}
+	\subsection{Unterscheidung in Beschreibung und Synchronisation}
+	
+	Per Konzept wird in Rahmen dieser Arbeit in Beschreibung und Synchronisation
+	unterschieden. Die Synchronisation dient zur Darstellung eines Datenbereiches
+	und ist unabhängig vom Algorithmus zum Synchronisieren. Die Synchronisation
+	hingegen baut auf der Beschreibung auf. Sie  umfasst ebenfalls den Ablauf
+	der Kommunikation zwischen zwei oder mehr Peers. \\
+	
+	Dies ermöglicht eine modulare Unterscheidung. Die Beschreibung stellt das  
+	dem extrahieren von Daten. Wie mit diesen Daten umgegangen wird ist nicht
+	festgelegt. Wehrendessen einhält die Synchronisation die eigentliche Logik zum
+	Ausführen der partiellen Synchronisation. 	
+	
+	\subsection{Darstellung eines Datenbereiches: Der Deskriptor}
 	
 	In diesem Abschnitt wird besprochen, wie ein Datenbereiches dargestellt werde
 	soll. Dazu betrachten wir die Datenstrukturen aus Abschnitt
@@ -754,8 +776,9 @@
 	\ref{sec:social}. Interessant dabei ist inwiefern sie zur Implementierung der
 	Beschreibung des Datenbereiches genutzt werden können, sodass eine Struktur
 	ähnlich der Social Media Formate erreicht werde kann. Auch inwiefern
-	diese zu XML serialisiert werden können findet dabei Betrachtung.
-	
+	diese zu XML serialisiert werden können findet dabei Betrachtung. Zu diesem
+	Zweck wird ein Objekt zur Beschreibung eines Datenbereiches eingeführt. Der
+	Deskriptor. 
 	
 	\subsubsection{Analyse der Datenstrukturen}
 	
@@ -858,7 +881,8 @@
 		zuordnen. Dies ist möglich, wenn der Deskriptor zur	Beschreibung einer
 		Beziehung benetzt wird, beispielsweise eines Ordners in einem Dateisystem.
 		dabei ist dann nur interessant, welche Kinder dieser besitzt, nicht aber
-		die Kontextpunkte, die er beschreibt.
+		die Kontextpunkte, die er beschreibt. So ein Deskriptor soll leerer
+		Deskriptor genannt werden.
 		\item \textbf{Identifikator (id):} Der Identifikator ist ein Teil des
 		Paares, welche die Vater-Kind Beziehung ermöglicht. Des weiteren
 		ermöglicht er das wieder auffinden eines bestimmten Deskriptor aus einer
@@ -935,16 +959,243 @@
 	
 	\begin{figure}[H] 
 		\centerline{
-			\includegraphics[scale=0.8]{../Bilder/selfref.jpg}
+			\includegraphics{../Bilder/selfref.jpg}
 		}
 		\caption{Skizze: Selbstreferenz}
 		\label{fig:selfref}
 	\end{figure}
 	
-	Dies ermöglicht...
+	Die Abbildung zeigt ein Entity Relationship Diagramm als Skizze. Die 
+	Zeichenlimitierung an der Zeichenkette kann hier ignoriert. Der Datentyp 	
+	varchar kann verallgemeinert als Zeichenkette interpretiert werden. Die
+	Elemente existieren nur in dieser Form aufgrund der Natur des Diagramms.
+	Der wichtige Aspekt ist die Selbstreferenz. Über den Fremdschlüssel
+	\emph{parent} wird ein Objekt des gleichen Typs referenziert. Dies erlaubt
+	uns einen Baum von beliebiger Tiefe zu erstellen. Ein Vater kann auch
+	auch beliebig viele Kinder haben, währendes ein Kind nur einen Vater besitzen
+	kann.
+	
+	Folgenden soll die Anwendung dieses Modells die in Abschnitt \ref{sec:social}
+	besprochenen Social Media Formaten angewandt werden. Es wird gezeigt, wie es
+	konzeptionell angewandt werden kann.
+	
+	\paragraph{Chat}\mbox{} \\
+	
+	Die Beziehungen in Chats sind vermutlich am einfachsten zu beschrieben, da
+	kaum welche existieren. \autoref{fig:chat_rel} zeigt ein Konzept, wie
+	für Beziehungen von Chats.
+
+	\begin{figure}[H]
+		\includegraphics[width=\linewidth]{../Bilder/chat_rel.jpg}
+		\caption{Beziehungen von Deskriptoren für Chats}
+		\label{fig:chat_rel}
+	\end{figure}
+	
+	Hier existiert genau eine eine Vater-Kind Beziehung. Dabei ist die
+	Wurzeln des Baumes nur ein Anker, der andere Deskriptoren zusammenfasst.
+	Geht man nach \autoref{fig:chat_rel}, so ist es möglich alle Chats
+	zu finden, indem man alle Kinder des Deskriptor Chat findet. Das
+	Vaterelement soll hierbei keine Informationen oder Kontextpunkte
+	beschrieben. Es dient lediglich der Zuordnung. Der Kontext kann somit als
+	leer angesehen werden. Alle Kindelemente des Deskriptor Chat hingeben
+	beschreiben genau einen Chat. Die zugehörigen Kontextpunkte sind somit die
+	Einträge in dem Chat. Die Beziehung zwischen Deskriptoren wird hier 
+	ausschließlich für die Zuordnung zu einer Obergruppe genutzt. 
+		
+	\paragraph{Forum und Dateisysteme}\mbox{} \\
+	
+	Forum und Dateisysteme gleichen sich in ihrer Baumartigen Struktur. Sie können
+	daher ein ähnliches Modell verwenden. Zum einen gibt es die Einordnung
+	in eine Ebene, wie ein Unterforum oder Verzeichnis sein kann. Auf der anderen
+	Seite gibt es die Elemente, welche die eigentlichen Daten enthalten. \\
+	
+	\autoref{fig:forum_rel} zeigt ein Konzept für Beziehungen, welche für die
+	Einordnung von Unterforen und Threads in ein Forum darstellt.
+	
+	\begin{figure}[H]
+		\includegraphics[width=\linewidth]{../Bilder/forum_rel.jpg}
+		\caption{Beziehungen von Deskriptoren eines Forum}
+		\label{fig:forum_rel}
+	\end{figure}
+	
+	Abgebildet wird die Baumstruktur. Es wird an einer Wurzel begonnen und
+	die Beziehungen zeigen auf, welche Unterforen von da an existieren. Die
+	Deskriptoren können, wie beim Chat Deskriptor, leer sein und zur zur
+	Darstellung der Beziehung verwendet werden. Zumindest ein Blatt muss
+	allerdings eine Menge an Kontextpunkten beschreiben. Per Konzept ist ein Thread 
+	eine Menge von Kontextpunkten, wobei jeder Punkt genau einem Post entspricht.
+	Demzufolge können leere Deskriptoren als reine Unterforen angesehen werden.
+	Nicht leere Deskriptoren hingegen schrieben immer einen Thread. Ein nicht
+	leerer Deskriptor mit einer Beziehung sollte Aufgrund der Übersichtlichkeit
+	nicht verwendet werden. \\
+	
+	Die Struktur von Dateisystem ist gleich der eines Forum. \autoref{fig:file_rel}
+	zeigt die Beziehungen für Verzeichnisse und Dateien.
+	
+	\begin{figure}[H]
+		\includegraphics[width=\linewidth]{../Bilder/file_rel.jpg}
+		\caption{Beziehungen von Deskriptoren in einem Dateisystem}
+		\label{fig:file_rel}
+	\end{figure}	
+	
+	Der konzeptionelle Unterschied zwischen Dateisystem und Forum ist hier, 
+	dass ein Kontextpunkt immer genau eine Datei beschreibt, anstatt dass ein
+	Thread eine Reihe von Kontextpunkten ist.\\
+	
+	Man beachte beachte, dass es sich hierbei um ein Konzept handelt.
+	Implementieren können anders aussehen. Zum Beispiel ist es möglich und
+	eventuell auch sinnvoll, dass eine Datei eine Information an einem Kontextpunkt
+	ist. Somit könnte ein Kontextpunkt mehre Dateien enthalten. Das Prinzip des
+	Deskriptor ist abstrakt genug um dem Entwickeln hier Freiheit für seine
+	Implementieren zu bieten.
+	
+	\subsubsection{Ein Schema von Beziehungen}
+	
+	Wie bereist erwähnt gibt es in Java, der Programmiersprache in welcher die 
+	zu entwickelnde Softwarekomponente geschrieben werden soll, keine vorgefertigte
+	Datenstruktur für Bäume. Von daher muss eine Klasse erstellt werden, welche
+	dieses ermöglicht. Im folgenden ist beschrieben, welche Aufgaben sie erfüllen
+	soll.
 	
 	\newpage
+	\begin{itemize}
+		\item \textbf{Speichern und laden der Deskriptoren:} Das Schema soll die
+		 Deskriptoren an der Wissensbasis speichern und aus dieser laden können.
+		 Dies soll sowohl für alle gehen als auch für einen bestimmten
+		 Identifikator.
+		\item \textbf{Vater-Kind Beziehung:} Das Schema stellt die eigentlichen
+		Vater-Kind Beziehungen da. Daher ermöglicht es einem Deskriptor Kinder
+		hinzuzufügen, sowie einen Vater zu setzen. Wird ein neuer Vater gesetzt,
+		so wird der alte überschrieben. Auch muss sichergestellt werden, dass
+		es zu keiner Schleife bei den Bezeichnungen kommt, damit immer ein Baum
+		mit einer Wurzel und Blättern existiert.
+	\end{itemize}
 	
+	\subsubsection{Extraktion von Daten}
+	\label{sec:extraction}
+	
+	Deskriptoren existieren um Datenbereiche zu beschrieben. Als solches ist es
+	muss de Möglichkeit bestehen Kontextpunkte anhand des Kontext eines Deskriptor
+	zu extrahieren. Dabei sollen die folgenden Möglichkeiten bestehen:
+	
+	\begin{itemize}
+		\item \textbf{Extraktion des Kontext des Deskriptor:} Nur die Kontextpunkte
+		zum Kontext des aktuellen Deskriptor werden extrahiert.
+		\item \textbf{Extraktion des Unterbaumes:} Die Kontextpunkte des aktuellen
+		 Deskriptor, sowie alle Kontextpunkte seiner Kinder werden extrahiert
+		\item \textbf{Extraktion des gesamten Baumes:} Die gesamten Kontextpunkte
+		des Baumes werden extrahiert. Das heißt, es wird zuerst die Wurzel des
+		Baumes gesucht und dann der Unterbaum, inklusive der Wurzel selbst,
+		extrahiert.
+	\end{itemize}
+	
+	\subsection{Synchronisation}
+	
+	In diesem Abschnitt wird der Algorithmus zur Synchronisation der Daten
+	konzipiert. Dazu wird der Algorithmus der SyncKB von des Shark Framework 
+	mit dem im letzten Abschnitt beschrieben Deskriptor erweitert.
+	
+	\subsubsection{Mängel der aktuellen SyncKB}
+	
+	Bevor ein Algorithmus entworfen wird sollen die Mängel der aktuellen 
+	Synchronisation besprochen werden. \autoref{fig:sync_now} zeigt nochmal eine
+	Skizze des Algorithmus des SyncKP aus Abschnitt \ref{sec:SyncKB}. Für den
+	eine Erklärung des sequenziellen Ablauf siehe \autoref{fig:SyncSeq} und
+	Nachfolgende Beschreibung.
+	
+	\begin{figure}[H]
+		\centerline{
+			\includegraphics[scale=0.495]{../Bilder/sync_flaws.jpg}
+		}
+		\caption{Skizze: Synchronisation Algorithmus der aktuellen SyncKB}
+		\label{fig:sync_now}
+	\end{figure}
+	
+	In der aktuellen Form zeigt der Algorithmus der SyncKB zwei gravierende Mängel
+	auf.
+	
+	\begin{enumerate}
+		\item \textbf{Synchronisation mit allen Peers:} Der Algorithmus nimmt alle
+		Peers der Wissensbasis daher und synchronisiert mit diesen. Für die
+		Fallbeispiele dieser Arbeit soll aber nur mit bestimmten Peers eine
+		Synchronisation stattfinden. So wären dies Beipeilweise in einem Chat die
+		Teilnehmer. In einem Forum alle Mitglieder dieses. Diese Menge ist
+		nicht zwangsweise gleich mit allen Peers in der Wissensbasis.
+		\item \textbf{Synchronisation aller Kontextpunkte:} Ebenfalls
+		synchronisiert der Algorithmus alle Kontextpunkte einer Wissensbasis. 
+		dem Namen dieser Arbeit Name ist allerdings eine partiellen Synchronisation
+		erwünscht.		
+	\end{enumerate}
+	
+	\subsubsection{Abstraktion von der SyncKB}
+	
+	Aufgrund der im letzten Abschnitt beschrieben Mängel soll eine Abstraktion der
+	SyncKB vorgenommen werden. Genauer soll die Klasse SyncKP abstrahiert werden.
+	Wenn hier von einer Abstraktion gesprochen wird	ist hier von einer Abstraktion 
+	in der objektorientierte Programmierung die Rede. Die Klasse SyncKP soll in
+	eine abstrakte Klasse AbstractSyncKP umgewandelt werden. Der Entwickler, der
+	von dieser erbt ist dann, ist dann verpflichtet die abstrakten Methoden dieser
+	Klasse zu implementieren. Ziel dieser ist das erreichen	folgender Aktionen:
+	
+	\begin{itemize}
+		\item \textbf{Entscheidung ob ein Interesse besteht:} Es sollte im 
+		Ermessen des Entwicklers liegen, ob eine Interesse zur Synchronisation
+		für eine Knowledge Port interessant ist oder nicht. Je nach Fall kann
+		es vorkommen, dass bestimmte Dimensionen des gesendeten Interesse überprüft
+		werden müssen oder nicht. Dem Entwickler soll hier Freiheit geben werden
+		dies selbst zu entscheiden.
+		\item \textbf{Finden des Identifikator:} Die bestehende Implementation der
+		SyncKB benötigt einen Identifikator woran es seine Metadaten speichern
+		kann. Dieser Identifikator ist nicht gleich mit dem Identifikator eines
+		Deskriptor. Es handelt sich um ein tatsächliches Tag an dem Properties
+		gespeichert werden können. Im künstlichen Interesse der aktuellen SyncKB
+		ist dies eine Tag in der Topic Dimension, dass schlicht dem halten von
+		Metadaten dient.
+		\item \textbf{Zusammenstellen des Angebotes:} Wie in Abschnitt
+		\ref{sec:extraction} erläutert gibt es mehre Möglichkeiten Wissen
+		anhand eines Deskriptor zu extrahieren. Daher ist es sinnvoll dem
+		Entwickler zu überlassen wie genau das Wissen aus der Wissensbasis zu
+		extrahieren ist. 
+	\end{itemize} 	
+	
+	\newpage
+	\section{Implementierung}
+	
+	In diesem Kapitel wird die Implementierung besprochen. Es wird gezeigt, wie
+	das Konzept in Java Quellcode implementiert wurde und welche Techniken dazu
+	verwendet wurden. Des Weiteren wird besprochen, wie entworfenen Klassen 
+	genutzt werden können.
+	
+	\subsection{Deskriptor und Schema}
+	
+	Deskriptor und Schema werden in die zwei Klassen ContextSpaceDescriptor
+	und DescriptorSchema aufgeteilt. Die Klasse ContextSpaceDescriptor ist dabei
+	eine reine Beschreibung eines Datenbereiches. Die Klasse DescriptorSchema
+	organisiert die Deskriptoren in einer Baumstruktur und ermöglicht das
+	Speichern und Laden dieser von einer Wissensbasis. \autoref{fig:impl_schema}
+	zeigt das Klassendiagramm beider.
+	
+	\begin{figure}[H]
+		\includegraphics[width=\linewidth]{../Bilder/impl_schema.jpg}
+		\caption{Klassendiagramm: Deskriptor und Schema}
+		\label{fig:impl_schema}
+	\end{figure}	
+	
+	Konstruktoren und private Methoden wurden hier vernachlässigt. Eine
+	explizite Beschreibung aller Klassen kann der Javadoc Dokumentation gefunden
+	werden (siehe \autoref{sec:CD}). \\
+	
+	Im folgenden soll auf die Verwendung dieser Klassen eingegangen werden.
+		
+	\paragraph{Deskriptor}\mbox{} \\
+	
+	\paragraph{Schema}\mbox{} \\
+	
+	\subsection{Serialisierung von Deskriptor und Schema}
+	
+	Wie in Abschnitt \ref{sec:konz_serialisierung}
+	
+	\newpage
 	\section{Quellenverzeichnis}	
 	
 	\printbibliography[type=article,heading=subbibliography,title={Artikel}]
@@ -954,10 +1205,47 @@
 	\printbibliography[type=online,heading=subbibliography,title={Webseiten}]
 
 	\newpage
-	
 	\section{Abbildungsverzeichnis}
 	\makeatletter
 		\@starttoc{lof}% Print List of Figures
 	\makeatother
+		
+	\newpage	
+	\begin{appendix}
+	
+	\section{CD-ROM zur Arbeit}
+	\label{sec:CD}
+	
+	Die beiliegende CD-ROM zur Arbeit enthält die folgenden Inhalte.
+	
+	\begin{itemize}
+		\item \textbf{Masterarbeit.pdf:} Diese Arbeit im PDF Format.
+		\item \textbf{Verzeichnis Quellcode:} Der Quellcode zu dieser Arbeit
+		als ein Maven-Projekt. Das Projekt bringt alle Abhängigkeiten mit
+		und kann über den \emph{install} Befehl von Maven gebaut werden. \\
+		Weitere Informationen zu maven sind unter \url{https://maven.apache.org/}
+		zu finden.
+		\item \textbf{Dokumentation:} JavaDoc Dokumentation des Quellcodes, sowie
+		ein Cobertura und PMD Report zur Qualitätssicherung. 
+	\end{itemize} 
+	
+	Die Quellen existieren zusätzlich in GitHub unter 
+	\url{https://github.com/SharedKnowledge/Incubator/tree/master/Descriptor}. \\
+	
+	Das Maven Projekt ist konfiguriert eine Cobertura Report über den Maven Befehl 
+	\emph{cobertura:cobertura} zu erstellen. Ein PMD Report kann über den Maven
+	Befehl \emph{pmd:pmd} erstellt werden.
+	
 
+	\newpage	
+  	\section{Eigenständigkeitserklärung}
+  	Hiermit versichere ich, dass ich die vorliegende Masterarbeit selbstständig und
+  	nur unter Verwendung der angegebenen Quellen und Hilfsmittel verfasst habe. Die
+  	Arbeit wurde bisher in gleicher oder ähnlicher Form keiner anderen
+  	Prüfungsbehörde vorgelegt. \\ \\
+  	
+ 	Datum: \hspace{10pt} Berlin, 12. Oktober 2015 \hspace{30pt} Unterschrift:
+
+	\end{appendix}
+  	
 \end{document}
