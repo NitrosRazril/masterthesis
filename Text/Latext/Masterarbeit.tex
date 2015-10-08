@@ -1,5 +1,7 @@
 \documentclass[a4paper]{article}  
+%\documentclass[11pt]{extarticle}
 
+\usepackage[onehalfspacing]{setspace}
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}	
 \usepackage[babel,german=quotes]{csquotes}
@@ -72,19 +74,18 @@
 	\tableofcontents
 	\newpage
 
-
 	\section{Einleitung}
 	
-	Soziale Netzwerke erfreuen sich immer mehr Beliebtheit in den letzten Jahren. 
-	Sei es Facebook oder schlicht das Forum zum Online Game, dass man gerade
+	Soziale Netzwerke erfreuen sich immer mehr Beliebtheit in den letzten Jahren, 
+	sei es Facebook oder schlicht das Forum zum Online Game, dass man gerade
 	spielt. Der Mensch möchte sich austauschen. Allerdings spätestens seit den
 	Enthüllungen Edward Snowdens gegen Ende Mai 2013 stellt sich hier die Frage
 	der Sicherheit der persönlichen Daten. Die meisten sozialen Netzwerke basieren
 	auf einer Client-Server Architektur. Dies bedeutetet, dass alle Daten auf einem
-	entfernten Server gespeichert sind. Der Nutzer hat somit keine Kontrolle bzw.
-	nur die beschränkte Kontrolle, welche der Betreiber des sozialen Netzwerkes
-	anbietet, wie mit seinen Daten umgegangen wird. \\
-	
+	entfernten Server gespeichert sind. Besonders brisant ist dies aufgrund eines
+	Urteils des Europäischen Gerichtshofes, laut dem die Vereinigten Staaten kein
+	sicheres Land für den Datenschutz aller Bürger Europas sind. \cite{welt} \\
+	 
 	Dies ist Motivation für ein Umdenken. Anstatt die Daten an zentraler Stelle
 	zu speichern verbleiben sie auf den lokalen Systemen des Benutzers. Das
 	Client-Server Modell wird durch ein Peer to Peer Modell ersetzt. Daten
@@ -93,43 +94,41 @@
 	mit einander synchronisiert. \\
 
 	Ziel dieser Arbeit ist es eine Softwarekomponente zu entwickeln, die eine 
-	partiellen Synchronisation von Wissensbasen ermöglicht. Eine Wissensbasis
+	partielle Synchronisation von Wissensbasen ermöglicht. Eine Wissensbasis
 	ist dabei nichts anderes als eine Menge an Daten, die in einer
-	bestimmten Stuckatur vorliegen bzw. durch eine abstrakte Darstellung
+	bestimmten Struktur vorliegen bzw. durch eine abstrakte Darstellung
 	beschreibbar sind. Mittels dieser abstrakte Darstellung soll die 
 	Implementierung von Chats, Foren bis hin zu Source Code Management Systemen
 	auf einer Peer to Peer Basis vereinfacht werden.
 	Als Grundlage dient hierzu das Shark Framework \cite{SharkFW} von Prof.
-	Dr.	Thomas Schwotzer und die darin enthalte SyncKB Klassensammlung. Sie
+	Dr.	Thomas Schwotzer und die darin enthaltene SyncKB Klassensammlung. Sie
 	ermöglicht bereits eine Synchronisation aller Daten in einer Wissensbasis.
-	Diese soll nun dahingehen ausgebaut werden, dass Teile der Wissensbasis
-	beschrieben werden können und nur diese beschrieben Teile synchronisiert 
-	werden. \\
+	Diese soll nun dahingehen ausgebaut werden, dass man Teile der Wissensbasis
+	beschrieben kann und die Synchronisation nur so beschriebenen Daten erfassen. \\
 	
-	Zuerst muss mit eine Möglichkeit gefunden werden, wie ein Teilbereich der
+	Zuerst soll eine Möglichkeit gefunden werden, wie ein Teilbereich der
 	Wissensbasis beschrieben werden kann. Diese Beschreibungen müssen dann
 	zwischen den einzelnen Peers kommunizierbar und auf den lokalen Systemen der
 	Peers persistierbar sein. Die durch diese Beschreibungen extrahierten Daten
-	werden synchronisiert, wobei ein Peer auf diese Aktion regieren kann um
+	werden synchronisiert, wobei ein Peer auf diese Aktion reagieren kann um
 	sie beispielsweise in einer grafischen Oberfläche auszugeben. Hierbei
 	ist darauf zu achten, dass die Beschreibung so abstrakt gewählt wird, dass 
 	sie	auf möglichst viele Fälle, wie die erwähnte Möglichkeit der 
 	Implementierung von Chats oder Foren, anwendbar ist. \\
-	Als Beweis der Funktionalität der Softwarekomponente wird schließlich
-	eine Chat mit grafisch Oberfläche geschrieben, in dem einzelne Peers sich
+	Als Beweis der Funktionalität der Softwarekomponente soll schließlich
+	ein Chat mit grafischer Oberfläche entwickelt werden, in dem einzelne Peers sich
 	miteinander	unterhalten können.\\
 	
-	Die Arbeit wird zuerst die Grundlagen, wie das Shark Framework \cite{SharkFW},
-	auf denen die Implementierung beruht, erläutern. Danach wird das Konzept
-	der Softwarekomponente erstellt. Es werden verschieden Möglichkeit
-	diskutiert, um die im letzten Absatz beschriebenen Anforderungen umzusetzen.
-	Im Anschluss wird die eigentliche Implementierung vorgestellt und auf
-	diese eingegangen. Nachfolgend werden die Tests und Methoden nur
-	Qualitätssicherung gezeigt und erklärt. Zuletzt wird ein Fazit gezogen
-	sowie ein Ausblick auf mögliche Verbesserungen oder Erweiterungen.
+	Die Arbeit erläutert zuerst die Grundlagen, wie zum Beispiel das Shark Framework
+	\cite{SharkFW},	auf denen die Implementierung beruhen wird. 
+	Danach soll das Konzept	der Softwarekomponente erstellt werden. Dieses diskutiert
+	verschieden Möglichkeit, um die im letzten Absatz beschriebenen Anforderungen
+	umzusetzen.	Im Anschluss kommt die Beschreibung der eigentliche Implementierung.
+	Nachfolgend werden die Tests und Methoden nur Qualitätssicherung gezeigt und
+	erklärt. Abschließen tut ein Fazit, welches ein Ausblick auf mögliche
+	Verbesserungen und Erweiterungen gibt.
 
 	\newpage
-	
 	\section{Grundlagen}
 	
 	Das folgende Kapitel widmet sich den Grundlagen auf denen die Arbeit
@@ -141,7 +140,7 @@
 	\subsection{Funktionale und nicht funktionale Anforderungen}
 	\label{sec:requirements}
 	
-	Im Folgendem werden die funktionalen und nicht funktionale
+	Im Folgendem werden die funktionalen und nicht funktionalen
 	Anforderungen besprochen. Diese	beschreiben welche Features die
 	Softwarekomponente bereitstellen soll, sowie wichtige Aspekte der
 	Qualitätssicherung.
@@ -151,22 +150,21 @@
 		\item \textbf{Beschreibbarkeit:} Es ist möglich einen Raum von
 		Daten zu beschreiben und diesen von einem anderen Raum
 		von Daten abzugrenzen. 
-		\item \textbf{Beziehungen:} Es ist möglich Beziehungen zwischen
-		Räumen zu definieren. So soll beispielsweise der Raum Java-Chat ein 
+		\item \textbf{Beziehungen:} Beziehungen zwischen Räumen können 
+		definieren werden. So soll beispielsweise der Raum Java-Chat ein 
 		Kind des Programmiersprachen-Chat Raumes sein können.
-		\item \textbf{Persistenz:} Es soll möglich sein die Beschreibung der
+		\item \textbf{Persistenz:} Es besteht die Möglichkeit Beschreibung der
 		Räume von Daten persistent zu speichern. Die gespeicherten Räume
 		bleiben somit erhalten und können zu späterem Zeitpunkt neu
 		geladen werden.
-		\item \textbf{Synchronisation:} Es ist möglich die Räume von Daten 
-		und ihre Abhängigkeiten mit Peers in einem Peer to Peer Netzwerk 
-		zu synchronisieren. Ziel ist es, dass die Räume nach der 
-		Synchronisation identisch von Aufbau und Inhalt sind.
+		\item \textbf{Synchronisation:} Die von den Räume beschriebenen Daten 
+		und ihre Abhängigkeiten sollen mit Peers in einem Peer to Peer Netzwerk 
+		zu synchronisieren sein. Ziel ist es, dass die Räume nach der 
+		Synchronisation identisch vom Aufbau und Inhalt sind.
 		\item \textbf{Änderbarkeit:} Es muss möglich sein eine Beschreibung
-		eines Raumes zu ändern inklusive ihrer Abhängigkeiten. Der Raum
-		selbst soll dabei bestehen bleiben und ohne weiteren Aufwand auffindbar 
-		wie	zuvor. Das heißt, er muss genauso aus der seiner persistenten Form 
-		geladen werde können wie zuvor sein.
+		eines Raumes zu ändern inklusive seiner Abhängigkeiten. Der Raum
+		selbst soll dabei bestehen bleiben. Das heißt, er muss trotz Änderung
+		mit den gleichen Algorithmen auffindbar sein.
 		\item \textbf{Änderung kommunizieren:} Änderungen müssen
 		kommuniziert werden können, sodass sich andere Peers synchronisieren.
 	\end{itemize} 	
@@ -179,8 +177,8 @@
 		zu erledigen ist. Mögliche Synergien des gewählten Tools mit anderen
 		Systemen zur Softwareentwicklung und Qualitätssicherung, zum Beispiel  
 		Jenkins \cite{Jenkins}, sind wünschenswert.
-		\item \textbf{Testbarkeit:} Die zu Softwarekomponente
-		ist modular so aufgebaut, dass sie durch Modultest testbar ist.
+		\item \textbf{Testbarkeit:} Die Softwarekomponente
+		ist modular so aufgebaut, dass Modultest durchgeführt werden können.
 		\item \textbf{Modultest:} Es existieren bereit eine Reihe von
 		Modultest, welche die grundlegende Funktionalität der 
 		Softwarekomponente sicherstellen.
@@ -211,55 +209,54 @@
 	
 	Die einzelnen Elemente haben dabei folgende Bedeutung:
 	\begin{itemize}
-		\item \textbf{Topic:} Dies ist das Thema eines Kontextes. Es ist ist eine
+		\item \textbf{Topic:} Dies ist das Thema eines Kontextes. Es ist eine
 		Beschreibung was der Kontext bedeutet.
 		\item \textbf{Orginator:} Der Autor des beschriebenen Kontextes. Dies
-		kann entweder der Ersteller sein oder der Autor der beiliegen
+		ist entweder der Ersteller sein oder der Autor der beiliegenden
 		Informationen. Bei einem wissenschaftlichen Artikel wäre dies der Autor
 		des besagten Artikels.
-		\item \textbf{Peers:} Die Peers Dimension kann unterschiedlich interpretiert
-		werden.	Zum einen kann es der Ersteller des Kontextes sein, der sich vom
-		Autor der beiliegenden Informationen unterschieden kann. Zum anderen kann es
-		der Besitzer des Kontextes sein, wobei Besitzer hier je nach 
-		beiliegendem Fall anders interpretiert werden kann. Im Allgemeinen
+		\item \textbf{Peers:} Die Peers Dimension ist unterschiedlich 		
+		interpretierbar. Zum einen kann es der Ersteller des Kontextes sein,
+		was nicht dem Autor der beiliegenden Informationen entsprechen muss,
+		zum anderen kann es	der Besitzer des Kontextes sein, wobei Besitzer hier
+		je nach beiliegendem Fall anders interpretierbar ist. Im Allgemeinen
 		kommt die Interpretation dieser Dimension auf den vorliegenden Fall an.
-		\newpage
 		\item \textbf{Remote Peers:} Dies sind die Peers an welche der Kontext
 		gesendet werden soll.
-		\item \textbf{Times:} Eine Zeitinformation die je nach vorliegendem Fall
-		anders Interpretiert werden kann. Diese Dimension biete die Möglichkeit
+		\item \textbf{Times:} Eine Zeitinformation, die je nach vorliegendem Fall
+		anders interpretiert werden kann. Diese Dimension biete die Möglichkeit
 		ein Zeitintervall anzugeben.
-		\item \textbf{Locations:} Gibt einen Ort an. Diese Information kann je
-		nach vorliegendem Fall anders interpretiert werden.
+		\item \textbf{Locations:} Gibt einen Ort an. Auch hier ist je nach 
+		vorliegenden Fall eine andere Interpretation möglich.
 		\item \textbf{Direction:} Die Richtung der Kommunikation des Kontextes.
 		Es ist möglich Daten nur zu empfangen, sie nur zu senden, beides oder keine
 		der genannten Aktionen durchzuführen.
 	\end{itemize} 	
 	
-	Zu beachte ist, dass wenn von einem Kontext gesprochen wird, dann handelt es
+	Zu beachte ist, wenn von einem Kontext gesprochen wird, handelt es
 	sich hierbei um eine Beschreibung einer Menge von Kontextpunkten. Diese
 	Punkte haben den gleichen Aufbau wie in \autoref{fig:CSModel} gezeigt. Der 
 	wesentliche Unterschied ist, dass ein Kontext eine Vielzahl von Inhalten,
-	ausgenommen der Direction, besitzen kann. Wehrendessen besitzt der
+	ausgenommen der Direction, besitzen kann. Währenddessen besitzt der
 	Kontextpunkt nur je genau einen Inhalt. Beispielhaft beschriebt der
-	Kontextpunkt nur das Thema Java, während der Kontext Java und C beinhaltet.
-	Die Dimensionen selbst werde als Kontextkoordinaten bezeichnet. Der 
-	Kontextpunkt vereint Koordinaten und Informationen. Der Kontext wiederum
-	ist eine Möglichkeit eine Menge an Kontextpunkten aus einer zugrundeliegenden
+	Kontextpunkt nur das Thema Java, während der Kontext die Themen Java und C 
+	beinhaltet kann. Die Dimensionen selbst werden als Kontextkoordinaten bezeichnet.
+	Der Kontextpunkt vereint Koordinaten und Informationen. Der Kontext wiederum
+	ist eine Möglichkeit, eine Menge an Kontextpunkten aus einer zugrundeliegenden
 	Wissensbasis zu extrahieren.
 	
 	\subsubsection{Knowledge Base} 
 	Die Knowledge Base, zu deutsch Wissensbasis, ist eine Sammlung von Wissen.
 	Wissen ist dabei eine Menge an Informationen, die anhand von
 	Kontextkoordinaten beschrieben sind. Die Vereinigung von Kontextkoordinaten
-	und Informationen bildeten einen Kontextpunkt.\\
+	und Informationen bilden einen Kontextpunkt.\\
 	
-	Die Wissensbasis bietet die Möglichkeit Peers und Themen zu speichern, sowie
+	Die Wissensbasis bietet die Möglichkeit Peers und Themen zu speichern sowie
 	die Themen in einer Taxonomie einzuordnen. Der für die zu entwickelnde
 	Softwarekomponente wichtige Punkt ist aber die Möglichkeit genannte
 	Kontextpunkt in ihr zu speichern und anhand eines Kontextes zu extrahieren.
 	Die Wissensbasis selbst kann hierbei ähnlich einer Datenbank angesehen werden.
-	Ziel ist es Teilbereiche, sprich eine bestimmte Menge an Daten dieser, mit
+	Ziel ist es, Teilbereiche, sprich eine bestimmte Menge an Daten, mit
 	anderen Wissensbasen zu synchronisieren. Zu diesem Zweck gibt es bereits eine
 	Implementierung, SyncKB genannt, auf der aufgebaut wird. \\
 	
@@ -269,28 +266,29 @@
 	
 	\subsubsection{Knowledge Port} 
 	Das wichtigste Objekt zur Kommunikation im Peer to Peer Netzwerk vom Shark
-	Framework ist der KnowledgePort. Hierbei handelt es um eine abstrakte Klasse,
-	welche die Implementierung von \emph{doExpose(SharkCS interest, KEPConnection
-	kepConnection)} und \emph{doInsert(Knowledge knowledge, KEPConnection
-	kepConnection)} erfordert. \\
+	Framework ist der KnowledgePort. Hierbei handelt es  sich um eine abstrakte
+	Klasse,	welche die Implementierung von \emph{doExpose(SharkCS interest,
+	KEPConnection kepConnection)} und \emph{doInsert(Knowledge knowledge,
+	KEPConnection kepConnection)} erfordert. \\
 	
-	Die doExpose-Methode erhält ein Interesse in der Form eines SharkCS. Wenn
-	ein Interesse versandt wurde, so wird sie als erstes aufgerufen. Ihre 
-	generelle Aufgabe ist zu ermitteln, ob das Interesse, das erhalten wurde, 
-	für den KnowledgePort von Relevanz ist. \\
+	\newpage
+	Die doExpose-Methode erhält ein Interesse in der Form eines SharkCS. Ist
+	ein Interesse versandt worden, so wird sie als erstes aufgerufen. Ihre 
+	generelle Aufgabe besteht darin zu ermitteln, ob das Interesse, das erhalten
+	wurde, für den KnowledgePort von Relevanz ist. \\
 	
 	Die doInsert-Methode hingegen erhält ein Knowledge Objekt, welches echte
 	Daten enthält. Es wird in der Regel gegen Ende der Kommunikation aufgerufen
 	und soll die Daten in die Wissensbasis einfügen. \\
 	
-	Beide Methoden erhalten ein KEPConnection Objekt mit dem sie Informationen 
-	über den Sender erhalten können. Des Weiteren können mithilfe dieses 
-	Objektes Daten an die doExpose und doInsert-Methode anderer Peer gesendet
-	werden. Dies erlaubt einen mehrfachen Datentausch. Ein Beispiel hierzu ist
-	der Synchronisationsprozess der SychKB, der im Nächten Abschnitt beschrieben 
-	wird und in \autoref{fig:SyncSeq} skizziert ist. \\
+	Beide Methoden erhalten ein KEPConnection Objekt, mit dem sie Informationen 
+	über den Sender bekommen können. Des Weiteren werden mithilfe dieses 
+	Objektes Daten an die doExpose und doInsert-Methode anderer Peer gesendet.
+	Dies erlaubt einen mehrfachen Datentausch. Ein Beispiel hierzu ist
+	der Synchronisationsprozess der SychKB, der im nachfolgenden Abschnitt
+	beschrieben wird und in \autoref{fig:SyncSeq} skizziert ist. \\
 	
-	Zu beachten ist, dass die Aussagen hier dem Standardfall entsprechen, wonach
+	Die Aussagen einsprechen hier dem Standardfall, wonach
 	der Knowledge Port entworfen wurde. Die tatsächliche Implementierung und
 	damit der Umgang mit dem SharkCS Objekt und dem Knowledge Objekt kann von jedem
 	Entwickler selbst bestimmt werden. Einzig vorgeschrieben ist, dass zuerst
@@ -301,16 +299,16 @@
 	\label{sec:SyncKB}
 	
 	Leider gibt es, abgesehen der JavaDoc Dokumentation, keine genaue
-	Beschreibung der generelle Funktionsweise der SyncKB. Daher soll hier auf 
-	diese dieser eingegangen werden. Weitere Informationen
+	Beschreibung der generellen Funktionsweise der SyncKB. Daher soll hier darauf
+	eingegangen werden. Weitere Informationen
 	können dem Quellcode selbst entnommen werden, der im Github vom SharkFW
 	zu finden ist. \cite{SyncKB} \\
 	
 	Die SyncKB hält den Hauptteil ihrer Logik im SyncKP. Die eigentliche
 	Synchronisation findet während des Kommunikationsprozesses statt und ist
 	keine Eigenschaft der Wissensbasis selbst. Die einzelnen Elemente der SyncKB
-	basiert hauptsächlich auf dem Entwurfsmuster Wrapper. So wurden den einzelnen
-	Element zwei zusätzliche Informationen mitgeben: 
+	basieren hauptsächlich auf dem Entwurfsmuster Wrapper. So wurden den einzelnen
+	Element zwei zusätzliche Informationen mitgegeben: 
 	
 	\begin{itemize}
 		\item \textbf{Version:} Die aktuelle Version des Elements. Ein neu 
@@ -344,7 +342,7 @@
 		das die Synchronisation anfordert, verglichen. Dazu ist an der
 		Wissensbasis, per Property, eine Liste von Name-Wert-Paare gespeichert, 
 		welche den Zeitpunkt des letzte Treffen mit einem Peer enthält.
-		Genauer ist ein Peer jeweils einem Zeitstempel zugeordnet. Alle
+		Genauer gesagt ist ein Peer jeweils einem Zeitstempel zugeordnet. Alle
 		Kontextpunkte, deren letzte Änderung neuer ist als das letzte Treffe mit
 		einem spezifischen Peer, hier Alice, werden angeboten.
 		\item \textbf{Angebot senden:} Die extrahierten Kontextpunkte werden per
@@ -358,12 +356,13 @@
 		skizziert. Alice wird alle Kontextpunkte von Bob anfragen, die sie
 		nicht besitzt oder die bei Bob eine höhere Versionsnummer haben als
 		bei ihr selbst.
-		\item \textbf{Anfrage senden:} Die anzufragenden Kontextpunkte werden
-		abermals am künstlichen Interesse per Property gespeichert und Bob
-		zugesandt.  
-		\item \textbf{Wissen bauen und Zeitstempel setzen:} Die angefragten
-		Kontextpunkte werden nun aus Bobs Wissensbasis extrahiert und in einem
-		Knowledge Objekt gespeichert. Zusätzlich werden	alle Themen und Peers,
+		\item \textbf{Anfrage senden:} Abermals erfolgt ein Versand der
+		Kontextpunkte per Property am künstlichen Interesse. Diesmal von Alice 
+		zu Bob.
+		\newpage
+		\item \textbf{Wissen bauen und Zeitstempel setzen:} Nun extrahiert Bobs die
+		angefragten	Kontextpunkte aus seiner Wissensbasis und speichert sie in einem
+		Knowledge Objekt. Zusätzlich werden	alle Themen und Peers,
 		anhand des beim Erstellen des SyncKP übergebenen FragmentationParameter,
 		dem Knowledge Objekt übergeben. Schließlich wird per Zeitstempel vermerkt,
 		dass eine Kommunikation stattgefunden hat. Dies entspricht dem
@@ -371,7 +370,7 @@
 		\item \textbf{Wissen senden:} Das Knowledge Objekt wird nun an Alice
 		gesendet.
 		\item \textbf{Wissen in Wissensbasis einfügen:} Alice überprüft 
-		die Kontextpunkte anschließend noch einmal anhand das im rechten Teil von
+		die Kontextpunkte anschließend noch einmal anhand des im rechten Teil von
 		\autoref{fig:SyncFlow} skizzierten Algorithmus und fügt diese dann in
 		ihre Wissensbasis ein.
 	\end{enumerate} 	
@@ -392,11 +391,11 @@
 	\subsection{Datenstrukturen zur Darstellung von Beziehungen}
 	\label{sec:datastruct}
 	
-	Wie in Abschnitt \ref{sec:requirements} beschrieben soll es möglich sein
+	Wie in Abschnitt \ref{sec:requirements} beschrieben, soll es möglich sein
 	Abhängigkeiten zwischen Räumen aufzustellen. Diese Abhängigkeiten stellen
 	eine Beziehung zwischen Daten da. Daher werden in diesem Abschnitt 
-	Datenstrukturen besprochen, die eine solche Beziehung darstellen können.
-	Dabei wird darauf eingegangen, wie sie die Daten und Beziehungen untereinander
+	Datenstrukturen besprochen, die eine solche Beziehung abbilden können.
+	Dabei wird darauf eingegangen, wie die Daten und Beziehungen untereinander
 	dargestellt sind. Weitergehende Erklärungen, wie mögliche Operationen, werden
 	nur durch Links zu entsprechender Literatur gegeben.
 	
@@ -415,8 +414,8 @@
 	können also nur vorwärts verfolgt werden, das heißt von einem Element
 	zum Nachfolgenden, nicht aber von einem Element zum Vorherigen.
 	\autoref{fig:single_linked_list} skizziert dieses und zeigt mögliche
-	Operation an einer verketteten Liste. Weitere Informationen können
-	der Erklärungen unter \cite{SLList} entnommen werden.
+	Operation an einer verketteten Liste auf. Weitere Informationen können
+	den Erklärungen unter \cite{SLList} entnommen werden.
 	
 	\begin{figure}[H] 
 		\includegraphics[width=\linewidth]{../Bilder/single_linked_list.jpg}
@@ -478,21 +477,21 @@
 	kann von jedem Element eine Beziehung zu einem anderen ausgehen. Gegenüber
 	Bäumen besitzen sie keine Wurzel, welche den Anfang darstellt. Zudem ist die
 	Anzahl an Beziehungen nicht fest gelegt. Ein Element besitzt eine Vielzahl von
-	Beziehungen. Gerichtet Graphen geben dieser Beziehung eine Richtung.
-	Somit kann allerdings nur angeben werden von welchem Element man zu welchen
+	Beziehungen. Gerichtete Graphen geben dieser Beziehung eine Richtung.
+	Somit kann allerdings nur angeben werden, von welchem Element man zu welchen
 	gelangt und gegebenenfalls nicht mehr zurück. Dies ist ähnlicher dem 
 	Nachfolger Link in einer verketteten Liste und stellt nicht,
 	wie beim Baum, eine Vater Kind Beziehung da. Des Weiteren besteht die
-	Möglichkeit in gewichteten Graphen Metadaten, wie die Kosten für einen
-	Übergang von Element A zu Element B, den Richtungen mitzugeben. Dennoch bleibt
-	die Art wie zwei Elemente im Detail zueinander in Beziehung stehen	
-	umbeschrieben. \autoref{fig:graph} skizziert das Modell eines gerichteten
-	Graphen. Die Peile stellen dabei die Übergänge zwischen den Elementen da.
+	Möglichkeit gewichteten Graphen Metadaten, wie die Kosten für einen
+	Übergang von Element A zu Element B, mitzugeben. Dennoch bleibt
+	die Art, wie zwei Elemente im Detail zueinander in Beziehung stehen,	
+	unbeschrieben. \autoref{fig:graph} skizziert das Modell eines gerichteten
+	Graphen. Die Pfeile stellen dabei die Übergänge zwischen den Elementen dar.
 	Weitere Erklärungen könne unter \cite{Graph} gefunden werden. 
 
 	\begin{figure}[H] 
 		\centerline{
-			\includegraphics{../Bilder/graph.jpg}
+			\includegraphics[scale=0.8]{../Bilder/graph.jpg}
 		}
 		\caption{Aufbau eines Graphen. Quelle: \cite{Graph}}
 		\label{fig:graph}
@@ -502,15 +501,15 @@
 	
 	Das Entity Relationship Modell, beschrieben in \cite{EntRel}, ist weniger
 	eine Datenstruktur, als ein Modell zur Beschreibung von Zusammenhängen zwischen
-	Daten bekannt aus relationalen Datenbanksysteme. Damit beschriebt es aber
+	Daten, bekannt aus relationalen Datenbanksysteme. Damit beschreibt es aber
 	auch eine Beziehung und kann somit als Grundlage herangezogen werden. Die
-	Beziehungen basieren darauf, dass jedes Element einen eindeutige 
-	Primärschlüssel besitzt. Datensätze, die mit anderen Datensätze in Beziehung 
+	Beziehungen basieren darauf, dass jedes Element einen eindeutigen 
+	Primärschlüssel besitzt. Datensätze, die mit anderen Datensätze, in Beziehung 
 	stehen, besitzen einen Fremdschlüssel, welcher identisch zum Primärschlüssel
 	des Datensatzes ist, mit dem sie in Beziehung stehen. \autoref{fig:ent_rel}
 	zeigt eine vereinfachte Skizze dieser Beziehung auf. Anders als die Abbildung
-	erscheinen lässt sind diese Schlüssel nicht an einen Datentypen gebunden. Auch
-	kann ein Schlüssel mehre Daten eines Datensatzes umfassen. Die Trennung
+	erscheinen lässt, sind diese Schlüssel nicht an einen Datentypen gebunden. Auch
+	kann ein Schlüssel mehrere Daten eines Datensatzes umfassen. Die Trennung
 	in Primärschlüssel und Fremdschlüssel erlaubt auch die Art der Beziehung zu
 	interpretieren. Beispielsweise kann dies eine Vater-Kind-Beziehung darstellen.
 	Das Modell ist aber nicht an diese Interpretation gebunden.
@@ -524,8 +523,8 @@
 	\subsection{Aufbau von Social Media Formaten}	
 	\label{sec:social}
 	
-	In diesem Abschnitt soll der Aufbaue eine Reihe von Social Media Formaten
-	beschrieben werden. Social Media Formaten sind dabei Anwendungen, die
+	In diesem Abschnitt soll der Aufbau einer Reihe von Social Media Formaten
+	beschrieben werden. Social Media Formate sind dabei Anwendungen, die
 	den Kontakt mit anderen Menschen fördern. Die Verknüpfung der einzelnen
 	Informationen und Daten miteinander soll hierbei von besonderem Interesse sein,
 	da sie die Abhängigkeiten aus Abschnitt \ref{sec:requirements} darstellen.
@@ -536,23 +535,25 @@
 	\ref{fig:chat} zeigt den Aufbau eines Chat im Programm Skype.
 	
 	\begin{figure}[H] 
-		\includegraphics[width=\linewidth]{../Bilder/chat.jpg}
+		\centerline{
+			\includegraphics[scale=0.58]{../Bilder/chat.jpg}
+		}
 		\caption{Aufbau Chat in Skype. \cite{chat}}
 		\label{fig:chat}
 	\end{figure}		
 	
 	Die Aufteilung erfolgt hier in erster Ebene (1) in Gruppen. In zweiter Ebene (2)
 	ist der eigentliche Chat. Ein Chat besitzt eine Vielzahl von Daten. Ein
-	Eintrag einhält beispielsweise einen Zeitstempel, Text und Autor der
+	Eintrag enthält beispielsweise einen Zeitstempel, Text und Autor der
 	Nachricht. Der Chat selbst erscheint identifizierbar durch einen nicht
 	sichtbaren Identifikator, da Elemente wie Teilnehmer geändert werden können
 	und der Chat trotzdem auffindbar ist. Vereinfacht kann man sagen, dass ein
-	Chat eine einzelner Raum von Informationen ist, der auf eine bestimmte Art
-	durch einen oder mehre Identifikatoren dargestellt wurde.
+	Chat ein einzelner Raum von Informationen ist, der auf eine bestimmte Art
+	durch einen oder mehrere Identifikatoren dargestellt wurde.
 	
 	\subsubsection{Forum}	
 	
-	Ein Forum ist gegenüber einem Chat meist komplexer und lässt sich in mehr
+	Ein Forum ist gegenüber einem Chat meist komplexer und lässt sich in mehrere
 	Ebenen einteilen. Als Beispiel soll das	Burning Board der WoltLab GmbH
 	herangezogen werden \cite{BB}. In den folgende Abbildungen
 	\ref{fig:forumstruc001}, \ref{fig:forumstruc002} und \ref{fig:forumstruc003}
@@ -568,20 +569,20 @@
 	
 	\autoref{fig:forumstruc001} zeigt die oberste Ebene eines Forums. Man sieht
 	eine Baumstruktur mit einer Wurzel (1). Von diesem Baum gehen Äste (2) aus
-	von welchem wiederum weitere Äste (3) ausgehen können.
+	von welchem wiederum weitere Äste (3) abzweigen können.
 	
 	\begin{figure}[H] 
 		\centerline{
-			\includegraphics{../Bilder/forumstruc002.jpg}
+			\includegraphics[scale=0.73]{../Bilder/forumstruc002.jpg}
 		}
 		\caption{Forumstruktur: Thread-Sammlung Ebene. Quelle: \cite{BB}}
 		\label{fig:forumstruc002}
 	\end{figure}	
 	
 	\autoref{fig:forumstruc002} zeigt die Ebene in der die Threads mit den
-	Inhalten zu finden sind. Man sieht, dass es sich hierbei um einen Konten (1)
+	Inhalten zu finden sind. Man sieht, dass es sich hierbei um einen Knoten (1)
 	in der zuvor erwähnten Baumstruktur handelt. Die einzelnen Threads (2) stellen
-	dabei die Blätter des Baumes da.
+	dabei die Blätter des Baumes dar.
 		
 	\begin{figure}[H] 
 		\centerline{
@@ -609,9 +610,10 @@
 	
 	Es mag auf den ersten Blick nicht so erscheinen, aber auch Dateien auf
 	dem Dateisystem können für soziale Kontakte genutzt werden. Ein einfaches
-	Beispiel hierfür ist die Existenz der die vielen Image-Hoster. Auch 
+	Beispiel hierfür ist die Existenz der vielen Image-Hoster. Auch 
 	Facebook und Instagram erlauben den Austausch von Bildern. \\
 	
+	\newpage
 	In diesem Sinne kann auch Versionsverwaltung Software wie Git oder SVN als
 	eine Art des sozialen Kontaktes gesehen werden. In einem Online Artikel der
 	t3n \cite{articleGitHub} wird beschrieben, dass man immer mehr auf den
@@ -623,7 +625,7 @@
 	Aus diesem Grund soll der Austausch von Teilen des Dateisystems über solche 
 	Versionsverwaltung Software auch Betrachtung finden. Die eigentliche
 	Versionierung wird dabei vernachlässigt. \autoref{fig:filesytsem}
-	zeigt den allgemeinen Aufbau von Dateisystem für unterschiedliche
+	zeigt den allgemeinen Aufbau von Dateisystemen für unterschiedliche
 	Betriebssysteme.
 	
 	\begin{figure}[H] 
@@ -638,11 +640,10 @@
 	Zu sehen ist, das identisch zum Forum eine Baumstruktur die Grundlage von
 	Dateisystemen ist. Hier enthalten nur die Blätter die eigentlichen Daten und die
 	anderen Knoten diene lediglich der Eingruppierung von Daten. Die Blätter selbst
-	können als ein einzelnes Element bestehend aus Bytes angereichert mit Metadaten
-	gesehen werden.	Dies unterscheidet sich zum Chat oder Forum, wo ein Blatt einem
-	beschriebener Raum von Daten ist. 
+	können als ein einzelnes Element, bestehend aus Bytes und angereichert mit
+	Metadaten, gesehen werden. Dies unterscheidet sich zum Chat oder Forum, wo ein
+	Blatt ein beschriebener Raum von Daten ist. 
 	
-	\newpage
 	\subsection{Tags zur Beschreibung von Inhalten}
 	\label{sec:tags}
 	
@@ -652,7 +653,7 @@
 	
 	\begin{figure}[H] 
 		\centerline{
-			\includegraphics{../Bilder/tags.jpg}
+			\includegraphics[scale=0.95]{../Bilder/tags.jpg}
 		}
 		\caption{
 			Illustration von Tags an einer Frage in stackoverflow.
@@ -664,31 +665,31 @@
 	Die Tags (1) dienen dabei der Eingruppierung der Frage. Beim Klick auf eines
 	der Tags gelangt man zu einer Liste von Fragen, die das gleiche Tag tragen. \\
 	
-	Was ist er Grund zur Nutzung von Tags? Oded Nov, Mor Naaman und Chen Ye
-	beschrieben es in ihrer Publikation What Drives Content Tagging: The Case of
-	Photos on Flickr \cite{CaseTag} als eine Möglichkeit Inhalten mit Metadaten,
-	in der Form von Schlüsselwörtern, anzureichern. Der Nutzer nutzt Tags, damit
-	seine Inhalte besser von anderen gefunden werde. Dies tut er, um seine soziale
-	Präsenz zu erweitern. Scott A. Golder und Bernardo A. Huberman beschreiben Tags 
-	in The Structure of Collaborative Tagging Systems \cite{CollTag} als eine
-	Möglichkeit Inhalte für zukünftige Navigation, Filterung und Suche zu
-	organisieren. Des Weiteren wird ausgeführt, dass Tags Informationen zu folgenden
-	Aspekten geben können:
+	Was ist der Grund zur Nutzung von Tags? Oded Nov, Mor Naaman und Chen Ye
+	beschreiben es in ihrer Publikation What Drives Content Tagging: The Case of
+	Photos on Flickr \cite{CaseTag} als eine Möglichkeit, Inhalte mit Metadaten
+	in der Form von Schlüsselwörtern anzureichern. Der Nutzer bedient sich der Tags, 
+	damit seine Inhalte besser von anderen gefunden werden. Dies tut er, um seine
+	soziale	Präsenz zu erweitern. Scott A. Golder und Bernardo A. Huberman
+	beschreiben Tags in The Structure of Collaborative Tagging 
+	Systems \cite{CollTag} als eine	Möglichkeit Inhalte für zukünftige Navigation,
+	Filterung und Suche zu organisieren. Des Weiteren wird ausgeführt, dass Tags
+	Informationen zu folgenden Aspekten geben können:
 	
 	\begin{itemize}
 		\item Über was oder wen ist der Inhalt?
-		\item Was für ein Inhalt ist es? Zum Beispiel ein Buch oder ein Artikel
-		einer Zeitschrift.
-		\item Wem gehört der Inhalt.
-		\item Einordnung in eine Kategorie.
+		\item Was für ein Inhalt ist es, ein Buch oder ein Artikel
+		in einer Zeitschrift?
+		\item Wem gehört der Inhalt?
+		\item Einordnung in eine Kategorie
 		\item Bewertung des Inhaltes, wie lustig oder unheimlich.
-		\item Selbstreferenzen wie \emph{mystuff} oder \emph{mycomments}
+		\item Selbstreferenzen, wie \emph{mystuff} oder \emph{mycomments},
 		um die Relation zu einem selbst darzustellen.
-		\item Organisieren von Aufgaben. Beispielsweise Tags wie \emph{toread} oder
+		\item Organisieren von Aufgaben, beispielsweise Tags wie \emph{toread} oder
 		\emph{jobsearch}.
 	\end{itemize}
 	
-	Im allgemeinem sind Tags eine Möglichkeit Inhalte zu organisieren. Sie können
+	Im Allgemeinem sind Tags eine Möglichkeit Inhalte zu organisieren. Sie können
 	auch als eine Beschreibung des Inhalts gesehen werden, wobei diese Beschreibung
 	vielen Zwecken dienen kann.
 		
@@ -708,25 +709,29 @@
 	wieder abrufen zu können. Zu diesem Zweck macht es Sinn das Feature des Setzen
 	von Properties an einer Wissensbasis zu nutzen. Auf diesem Weg kann je 
 	Wissensbasis eine Liste von Beschreibungen gespeichert werden. Insbesondere
-	kann dies als Zugrodung dieser Beschreibungen zur entsprechenden Wissensbasis
+	kann dies als Zuordnung dieser Beschreibungen zur entsprechenden Wissensbasis
 	gesehen werden. \\
 	
 	Dazu benötigen wir eine Technik, welche die Serialisierung eines Objektes einer
 	Programmiersprache, in diesem Fall Java, in eine Zeichenkette ermöglicht. Um
 	die Anforderung der Wartbarkeit zu gewährleisten soll hier ein menschlich
 	lesbares Format gewählt werden, dass von den meisten Entwicklern verstanden
-	wird. XML und JSON erfüllen diese Anfordern. Zum Vergleich sollen die
-	Ergebnisse aus der Fallstudie \cite{XmlJson} zu rate gezogen. Diese sind den
-	folgenden Abbildungen dargestellt.
+	wird. XML und JSON erfüllen diese Anforderungen. Zum Vergleich sollen die
+	Ergebnisse aus der Fallstudie \cite{XmlJson} zu rate gezogen werden.
+	Diese sind in den folgenden Abbildungen dargestellt.
 	
 	\begin{figure}[H] 
-		\includegraphics[width=\linewidth]{../Bilder/xml_json_time_sen1.jpg}
+		\centerline{
+			\includegraphics[scale=0.78]{../Bilder/xml_json_time_sen1.jpg}
+		}
 		\caption{Scenario 1 JSON vs. XML Timing. Quelle: \cite{XmlJson}}
 		\label{fig:xml_json_time_sen1}
 	\end{figure}
 	
 	\begin{figure}[H] 
-		\includegraphics[width=\linewidth]{../Bilder/xml_json_mem_sen1.jpg}
+		\centerline{
+			\includegraphics[scale=0.78]{../Bilder/xml_json_mem_sen1.jpg}
+		}
 		\caption{Scenario 1 JSON vs. XML CPU/Mem. Quelle: \cite{XmlJson}}
 		\label{fig:xml_json_mem_sen1}
 	\end{figure}
@@ -761,46 +766,46 @@
 	
 	Die Abbildungen \ref{fig:xml_json_time_sen2}, \ref{fig:json_mem_sen2}
 	und \ref{fig:xml_mem_sen2} zeigen den zweiten Fall der Fallstudie. Hier
-	wurden mehrfach hintereinander kleine Datensatze überragen anstatt alle
+	wurden mehrfach hintereinander kleine Datensätze übertragen anstatt alle
 	Datenobjekte in einer Übertragung zu senden. Auch hier zeigt sich, dass
-	JSON im allgemeinen bessere Werte liefert. Nur bei der Nutzung der CPU des
+	JSON im Allgemeinen bessere Werte liefert. Nur bei der Nutzung der CPU des
 	Nutzers zeigt XML, wie im ersten Fall, bessere Werte auf. \\
 	 
 	Mit den vorliegenden Daten würde die Wahl normalerweise auf JSON fallen.
 	Allerdings handelt es sich bei der zu entwickelnden Softwarekomponente um
-	einen Teil eines Frameworks, was eine gesonderte Sichtweise erfordert. 
+	einen Teil eines Frameworks. Das erfordert eine gesonderte Sichtweise. 
 	
 	\begin{itemize}
 		\item \textbf{Abhängigkeiten:} Umgangssprachlich gibt es den Begriff der
-		"Jar-Hölle". Dieser beschriebt, dass Frameworks ihre Abhängigkeiten, in der
-		Form von Jar-Archiven, mitbringen und dadurch die Möglichkeit besteht diese
+		"Jar-Hölle". Dieser beschreibt, dass Frameworks ihre Abhängigkeiten in der
+		Form von Jar-Archiven mitbringen und dadurch die Möglichkeit besteht diese
 		mehrfach in einem Projekt zu haben. Das erhöht den Speicherbedarf einer
 		Applikation unnötig. Auf der anderen Seite kann es passieren, dass keine
 		Abhängigkeiten mitgebracht werden und  von Entwickler eigenständig
 		hinzugefügt werden müssen. Dies erfordert einen ausdrückliche Hinweis in
 		der Dokumentation, wobei nicht sichergestellt werden kann, ob dieser
-		gelesen	wird. Zwar kann dieses durch das Nutzen eines Tools wie Maven
-		verhindert werden, allerdings nutzt das Shark Framework dieses nicht.
+		gelesen	wird. Zwar kann dies durch das Nutzen eines Tools wie Maven
+		verhindert werden, allerdings nutzt das Shark Framework dieses Tool nicht.
 		Insofern ist interessant, dass Java von Hause aus XML unterstützt mit JAXB.
 		JSON hingegen erfordert das Einbinden eines zusätzlichen Frameworks.
 		\item \textbf{Einheitlichkeit:} Das Shark Frameworks benutzt bereits eine
 		XML Repräsentation an vielen Stellen. Ein Mix von XML und JSON bei der
-		Benutzung dieses kann durchaus verwirrend für Entwickler sein. Besonders
+		Benutzung, kann durchaus verwirrend für Entwickler sein. Besonders
 		im Bezug auf die Weiterentwicklung des Frameworks. Die zur Zeit proprietäre
 		XML Serialisierung sollte einfacher auf das im Java Development Kit
-		enthaltene JAXB umzustellen sein als auf ein externes Framework für JSON.
-		Sofern dies bei zukünftigen Refactoring Aktionen geplant ist.
-		\item \textbf{XML Schema:} XML bietet die Möglichkeit den
+		enthaltene JAXB umzustellen sein als auf ein externes Framework für JSON,
+		sofern dies bei zukünftigen Refactoring Aktionen geplant ist.
+		\item \textbf{XML Schema:} XML bietet die Möglichkeit, den
 		Aufbau der XML Datei über XML-Shema und DDTs zu beschreiben. Dadurch
 		können XML-Parser erkennen, ob ein XML-Dokument valide ist. JSON fehlt
 		diese Möglichkeit. Im Sinne der Wartbarkeit ist dies ein Feature, dass
-		zukünftig an Bedeutung gewinne könnte. Speziell da das Shark Framework
+		zukünftig an Bedeutung gewinnen könnte. Speziell, da das Shark Framework
 		aus einer Vielzahl komplexer Objekten besteht, die beim Datenaustausch
 		Versand werden.
 		\item \textbf{sun.misc.Unsafe:} Wie ein Artikel auf JAXenter \cite{unsafe}
-		beschreibt plante Oracle ursprünglich für Java 9 die Entfernung von
+		beschreibt, plante Oracle ursprünglich für Java 9 die Entfernung von
 		sun.misc.Unsafe. Diese wird dennoch von vielen Frameworks genutzt. Da
-		JAXB Bestandteil des normalen Java Development Kit von Oracle ist sind
+		JAXB Bestandteil des normalen Java Development Kit von Oracle ist, sind
 		hier, gegenüber der Verwendung von Frameworks Dritter, keine Probleme zu
 		erwarten.
 		
@@ -811,96 +816,99 @@
 	
 	\subsection{Unterscheidung in Beschreibung und Synchronisation}
 	
-	Per Konzept wird in Rahmen dieser Arbeit in Beschreibung und Synchronisation
+	Per Konzept wird im Rahmen dieser Arbeit in Beschreibung und Synchronisation
 	unterschieden. Die Synchronisation dient zur Darstellung eines Datenbereiches
 	und ist unabhängig vom Algorithmus zum Synchronisieren. Die Synchronisation
 	hingegen baut auf der Beschreibung auf. Sie  umfasst ebenfalls den Ablauf
-	der Kommunikation zwischen zwei oder mehr Peers. \\
+	der Kommunikation zwischen zwei oder mehr Peers. Dies ermöglicht eine modulare
+	Unterscheidung. \\
 	
-	Dies ermöglicht eine modulare Unterscheidung. Die Beschreibung dient  
-	dem Extrahieren von Daten. Wie mit diesen Daten umgegangen wird ist nicht
-	festgelegt. Wehrendessen einhält die Synchronisation die eigentliche Logik zum
-	Ausführen der partiellen Synchronisation. 	
+	Die Beschreibung dient dem Extrahieren von Daten. Wie mit diesen
+	Daten umgegangen wird ist nicht festgelegt. Währenddessen enthält die
+	Synchronisation die eigentliche Logik zum Ausführen der partiellen
+	Synchronisation. 	
 	
 	\subsection{Ein Nachschlagewerk für Datenbereiche}
 	
-	Wie in Abschnitt \ref{sec:tags} beschrieben eigenen sich Tags zum organisieren,
-	filtern und suchen von Inhalten. Die Datenbereiche, die beschrieben werde sollen,
-	können als Inhalte aufgefasst werden. Wenn es also gelingt diese Inhalte mittels
-	eines Kontextes zu beschreiben, so sind sie einfach wiederzufinden. Der Kontext
-	ersetzt dabei das Tag. Gelingt es ebenfalls diese Beschreibungen in Beziehungen
-	untereinander zu setzen, so kann ein Nachschlagewerk für Datenbereiche aufgebaut
-	werden. So könnten sich unter dem Schlagwort Programmiersprachen die Schlagwörter
-	Java und C befinden. Je nach Suchalgorithmus wären so Abhängigkeit auffindbar
+	Wie in Abschnitt \ref{sec:tags} beschrieben, eigenen sich Tags zum organisieren,
+	filtern und suchen von Inhalten. Die Datenbereiche, die beschrieben werden
+	sollen, können als Inhalte aufgefasst werden. Wenn es also gelingt diese Inhalte
+	mittels eines Kontextes zu beschreiben, so sind sie einfach wiederzufinden.
+	Der Kontext ersetzt dabei das Tag. Gelingt es ebenfalls diese Beschreibungen in
+	Beziehungen untereinander zu setzen, so kann ein Nachschlagewerk für
+	Datenbereiche aufgebaut werden. So könnten sich unter dem Schlagwort
+	Programmiersprachen die Schlagwörter Java und C befinden. 
+	Je nach Suchalgorithmus wären so Abhängigkeiten auffindbar
 	und Datenbereiche könnten entsprechend erkannt werden. Die Idee ist hierbei
-	ähnlich der Themen und Peer Taxonomie, welche bereist in einer Wissensbasis
+	ähnlich der Themen und Peer Taxonomie, welche bereits in einer Wissensbasis
 	existiert. Allerdings ist sie hier auf einen Kontext bezogen.
 	
 	\subsection{Darstellung eines Datenbereiches über einen Deskriptor}
 	
-	In diesem Abschnitt wird besprochen, wie ein Datenbereiches dargestellt werde
+	In diesem Abschnitt wird besprochen, wie ein Datenbereich dargestellt werden
 	soll. Dazu betrachten wir die Datenstrukturen aus Abschnitt
 	\ref{sec:datastruct} und den Aufbau von Social Media Formaten aus Abschnitt
-	\ref{sec:social}. Interessant dabei ist inwiefern sie zur Implementierung der
-	Beschreibung des Datenbereiches genutzt werden können, sodass eine Struktur
-	ähnlich der Social Media Formate erreicht werde kann. Auch inwiefern
-	diese zu XML serialisiert werden können findet dabei Betrachtung. Zu diesem
+	\ref{sec:social}. Interessant dabei ist, inwiefern sie zur Implementierung der
+	Beschreibung des Datenbereiches genutzt werden können, so dass eine Struktur
+	ähnlich der Social Media Formate, erreicht werden kann. Auch inwiefern
+	diese zu XML serialisiert werden können, findet dabei Betrachtung. Zu diesem
 	Zweck wird ein Objekt zur Beschreibung eines Datenbereiches eingeführt: Der
 	Deskriptor. 
 	
 	\subsubsection{Analyse der Datenstrukturen}
 	
-	Im folgenden die Analyse der in  Abschnitt \ref{sec:datastruct} beschrieben
-	Datenstrukturen im Bezug auf die in Abschnitt \ref{sec:social} genannten
-	Social Media Formate.
+	Im folgenden wird auf die Analyse der in  Abschnitt \ref{sec:datastruct}
+	beschriebenen Datenstrukturen in Bezug auf die in Abschnitt \ref{sec:social}
+	genannten Social Media Formate eingegangen.
 	
 	\paragraph{Verkettete-Listen}\mbox{} \\
 	
 	Verkettete-Listen erlauben das Darstellen einer Vater-Kind Beziehung. Bei
-	Zweifach-Verkette-Listen könnte hier vorwärts und rückwärts nach Element
-	gesucht werden. Serialisiert wären sie in XML durch eine einfache Liste
+	Zweifach-Verketteten-Listen könnte hier vorwärts und rückwärts nach Elementen
+	gesucht werden. Serialisiert wären sie in XML durch eine einfache Liste,
 	mit einer vorgeben festen Reihenfolge. Das bedeutet, jedes Element müsste
 	im XML in der Reihenfolge erscheinen, wie es in der Liste gespeichert ist. \\
 	
-	Verkettete-Listen Listen haben allerdings den Nachteil, dass je nur ein
-	Vorgänger und Nachfolger definiert werden kann. Daher eigen sie sich weniger
+	Verkettete-Listen haben allerdings den Nachteil, dass je nur ein
+	Vorgänger und Nachfolger definiert werden kann. Daher eignen sie sich weniger
 	für die Darstellung der Baumstruktur eines Forums oder eines Teil des
 	Dateisystems. 	
 	
 	\paragraph{Bäume}\mbox{} \\
 	
-	Die meisten der besprochenen Social Media Formaten haben von Grund auf eine
+	Die meisten der besprochenen Social Media Formate haben von Grund auf eine
 	Baumstruktur. Daher lassen sie sich ohne größere Probleme auch als ein
 	Solcher darstellen. Da XML ebenfalls eine Baumstruktur besitzt, über
 	die Tags als Subtags anderer Tags dargestellt werden können, ist auch
 	die Serialisierung in dieses Format kein Problem. \\
 	
-	Problematisch hingegn ist die Tatsache, dass in der Programmiersprache 
+	Problematisch hingegen ist die Tatsache, dass in der Programmiersprache 
 	Java, in welcher die Softwarekomponente geschrieben wird, keine vorgefertigte
-	Datenstuck hierzu enthalten ist.
+	Datenstrukturen für Bäume existiere.
 	
 	\paragraph{Graphen}\mbox{} \\
 	
 	Bäume sind prinzipiell eine besondere Art von Graphen. Daher lassen sich
-	die Social Media Formaten auch als diese Darstellen. Problematisch
+	die Social Media Formate auch als diese darstellen. Problematisch
 	könnte hierbei sein, die Wege von einem Knoten zu einem anderen zu
 	serialisieren. Dabei kann es sehr einfach zu doppelter Datenhaltung kommen. \\
 	
 	Allgemein wären Graphen zu weit gefasst. Kosten für die Wege sind nicht
 	ausschlaggebend für die Beschreibung einer Beziehung. Auch kann angenommen
-	werden, dass man von einem Vater immer zu seinem Kindern kommt und das ein Kind
-	immer seinen Vater kennt. Bäume sind für diesem Aspekt ausreicht, besonders da
+	werden, dass man von einem Vater immer zu seinen Kindern kommt und das ein Kind
+	immer seinen Vater kennt. Bäume sind für diesen Aspekt ausreichend, besonders da
 	sie einen Startpunkt, die Wurzel, besitzen.
 	
 	\paragraph{Entity Relationship Modell}\mbox{} \\
 	
-	Auch wenn eher ein Modell als eine Datenstruktur, so ist ein Element im
-	Entity Relationship Modell eindeutig durch seinen Primärschlüssel beschrieben.
+	Auch wenn das Entity Relationship Modell eher ein Modell als
+	eine Datenstruktur darstellt, so ist ein Element in diesem trotzdem
+	durch einen Primärschlüssel eindeutig beschrieben.
 	Eine Beziehung zu einem Anderen lässt sich hier einfach durch einen
 	Fremdschlüssel erreichen. Dies ermöglicht die Flexibilität, dass ein Element
-	sehr leicht mehre Kinder und Väter haben. Auch als 1:1, 1:N. N:M Beziehung
+	sehr leicht mehre Kinder und Väter haben kann, auch als 1:1, 1:N. N:M Beziehung
 	aus Datenbanksystemen bekannt. Viele Elemente der Social Media Formaten sind
-	durch einen Identifikator identifizierbar. Beipeilweise kann ein Thread eines
+	durch einen Identifikator identifizierbar. Beispielsweise kann ein Thread eines
 	Forums einen numerischen Identifikator besitzen. Dieser kann bei der
 	URL Generierung	genutzt werden, um eine eindeutige URL zu erzeugen. Daher sollte
 	es auch möglich sein diesen Identifikator zur Identifikation eines Raumes zu
@@ -911,26 +919,26 @@
 	Serialisierung nur ein zusätzliches Tag im XML mit ihm als Inhalt. \\
 	
 	Problematisch ist, dass die einzelnen Beziehungen programmatisch 
-	zusammengesetzt werden müssen. Wir haben im Rahmen dieser Arbeit keine
-	relationale	Datenbank mit einem Datenbanksystem, welche dies für uns übernehmen
-	könne.
+	zusammengesetzt werden müssen. Im Rahmen dieser Arbeit existiert keine
+	relationale	Datenbank mit einem Datenbanksystem, welches dies übernehmen
+	könnte.
 	
 	\paragraph{Auswertung}\mbox{} \\
 	
-	Da die beschriebenen Social Media Formate bereits eine eine baumartige Struktur
+	Da die beschriebenen Social Media Formate bereits eine baumartige Struktur
 	aufweisen ist es sinnvoll auch die Datenstruktur eines Baumes zu nutzen. Um
 	die eigentlichen Vater-Kind Beziehungen darzustellen kann das Prinzip des
 	Entity Relationship Modell aus Datenbanken verwendet werden. Dies ermöglicht
 	einen Identifikator für einen Raum zu definieren, anhand dessen er wieder
-	auffindbar ist. Serialisiert kann das Ganze als eine Liste werden, wobei
+	auffindbar ist. Das Ganze kann als eine Liste serialisiert werden, wobei
 	jeder Identifikator nur einmal vorkommt.
 	
 	\subsubsection{Beschreibung eines Datenbereiches durch einen Deskriptoren}
 	\label{sec:desk}
 	
 	Nach der Analyse aus dem vorhergehenden Abschnitt soll nun festgelegt werden
-	mit welchen Parametern ein Datenbereiches beschrieben wird.
-	\autoref{fig:descriptor} zeigt den Aufbau unseres beschreibenden Elements, dem
+	mit welchen Parametern ein Datenbereich beschrieben wird.
+	\autoref{fig:descriptor} zeigt den Aufbau des beschreibenden Elements, dem
 	Deskriptor.
 	
 	\begin{figure}[H] 
@@ -948,32 +956,32 @@
 		\item \textbf{Kontext (context):} Der Kontext ist der Kern des Deskriptor.
 		Er bestimmt, welche Kontextpunkte durch ihn aus der Wissensbasis extrahiert
 		werden können. Dabei ist es allerdings auch möglich ihm keine Bedeutung 
-		zuordnen. Dies macht Sinn, wenn der Deskriptor nur zur Beschreibung einer
+		zuzuordnen. Dies macht Sinn, wenn der Deskriptor nur zur Beschreibung einer
 		Beziehung benutzt wird, beispielsweise eines Ordners in einem Dateisystem.
 		Dabei ist dann nur interessant, welche Kinder dieser besitzt, nicht aber
 		die Kontextpunkte, die er beschreibt. So ein Deskriptor soll leerer
 		Deskriptor genannt werden.
 		\item \textbf{Identifikator (id):} Der Identifikator ist ein Teil des
 		Paares, welche die Vater-Kind Beziehung ermöglicht. Des Weiteren
-		ermöglicht er das wieder auffinden eines bestimmten Deskriptor aus einer
+		ermöglicht er das Wiederauffinden eines bestimmten Deskriptor aus einer
 		Liste von Deskriptoren.
 		\item \textbf{Vater (parent):} Der Vater ist der andere Teil des Paares,
-		welche die Vater-Kind Beziehung ermöglicht. Er erlaubt das Aufwinden des
+		welche die Vater-Kind Beziehung ermöglicht. Er erlaubt das Auffinden des
 		Vaters eines Deskriptor. Ebenfalls kann so ein Deskriptor nach seinen
 		Kindern	suchen.
 	\end{itemize} 	
 	
-	Man beachte, dass Identifikator und Vater Zeichenketten sind statt, wie
-	oft übliche, numerische Werte. Es ist geplant, dass der jeweilige Entwickler
+	Man beachte, dass Identifikator und Vater Zeichenketten sind, statt wie
+	oft übliche numerische Werte. Es ist geplant, dass der jeweilige Entwickler
 	dafür zuständig ist einen Identifikator zu definieren. Dieser sollte daher
 	für Menschen lesbar und interpretierbar sein. Ein Identifikator für einen
 	Chat könnte zum Beispiel einfach Chat genannt werden. Oder es könnte sich um
 	einen Subject Identifier des Topic Maps Modells handeln, dem sich das Shark
 	Framework bedient. \\
 	
-	Hierbei sei angemerkt, dass es sich trotzdem um eine technische Identifikator,
+	Hierbei sei angemerkt, dass es sich trotzdem um einen technischen Identifikator,
 	der von Maschinen und nicht Menschen verwendet wird, handelt. Die Darstellung
-	als Zeichenkette dient jegliche als Vereinfachung. Somit ist eine größere
+	als Zeichenkette dient lediglich als Vereinfachung. Somit ist eine größere
 	Auswahl an zu erstellenden Identifikatoren möglich und zeigt Synergien 
 	mit dem Topic Maps Modells des Shark Framework auf, da die Subject Identifier
 	ein Array von Zeichenketten sind. \\
@@ -981,7 +989,7 @@
 	Des Weiteren werden die Väter eines Elements vorerst auf einen Knoten,
 	wie in einem einem Baum üblich, beschränkt. Dies kann in diesem Modell später,
 	wenn die Notwendigkeit dieser Komplexität besteht, durch das Austauschen des
-	parent Parameters durch eine Liste von Zeichenketten auf mehre Väter erweitert
+	parent Parameters durch eine Liste von Zeichenketten auf mehrere Väter erweitert
 	werden.
 	
 	\subsubsection{Gleichheit von Deskriptoren}
@@ -992,38 +1000,38 @@
 	einem Anderen \emph{identisch} ist.
 	
 	\begin{itemize}
-		\item \textbf{Ein Deskriptor \emph{gleicht} einem Anderen:} Deskriptor
-		sind gleich, wenn ihre Identifikatoren gleich sind. Das heißt, die
+		\item \textbf{Ein Deskriptor \emph{gleicht} einem Anderen:} Deskriptoren
+		sind gleich, wenn ihre Identifikatoren gleich sind, das heißt die
 		Zeichenketten müssen übereinstimmten.
 		\item \textbf{Ein Deskriptor ist \emph{identisch} zu einem Anderen:}
-		Deskriptor sind identisch zueinander, wenn alle ihre Elemente gleich sind.
-		Das heißt, die Zeichenketten des Identifikator und Vater müssen mit denen,
-		eines anderen Deskriptor übereinstimmten. Des Weiteren muss der Kontext,
-		der beiden Deskriptoren, nach Regeln des Shark Frameworks, identisch sein.
+		Deskriptoren sind identisch zueinander, wenn alle ihre Elemente gleich sind,
+		das heißt die Zeichenketten des Identifikator und Vater müssen mit denen,
+		eines anderen Deskriptor übereinstimmten. Des Weiteren muss der Kontext
+		der beiden Deskriptoren nach Regeln des Shark Frameworks identisch sein.
 	\end{itemize} 	
 	
-	Diese Unterscheidung ist notwendig, um das wiederzufinden eines Deskriptor
-	sicher zu stellen und doppelte Datenhalten zu verhindern.
-	Anhand des Identifikators kann nach einem bestimmten Deskriptor gesucht werde. 
+	Diese Unterscheidung ist notwendig, um das Wiederfinden eines Deskriptors
+	sicher zu stellen und doppelte Datenhaltung zu verhindern.
+	Anhand des Identifikators kann man Deskriptoren erkennen und nach ihnen suchen. 
 	Dennoch muss es möglich sein Unterschiede in den Parametern 
-	Vater und Kontext zu erkennen für mögliche Anpassungen. Zum Beispiel könnte
+	Vater und Kontext aufzuspüren. Zum Beispiel könnte
 	der Deskriptor von einem anderen Peer geändert worden seien und dann
 	versandt, damit sich alle anderen Peers synchronisieren können. In diesem
-	Fallbeispiel ist es nötigen, dass der Deskriptor anhand seines Identifikators
+	Fallbeispiel ist es nötig, dass der Deskriptor anhand seines Identifikators
 	gefunden wird und eine Überprüfung stattfindet, ob dieser angepasst werden
 	muss. \\
 	
-	Geplant ist die Umsetzung für Gleichheit anhand der equals-Methode die ein
+	Geplant ist die Umsetzung für Gleichheit anhand der equals-Methode, die ein
 	jedes Java-Objekt von Object erbt. Viele Methoden der Collection-API basieren
 	darauf, wie beispielsweise die Aussage, ob eine Liste ein bestimmtes Objekt
-	einhält. Die Aussage ein Deskriptor sei identisch zu einem Anderen soll anhand
+	enthält. Die Aussage ein Deskriptor sei identisch zu einem Anderen, soll anhand
 	einer gesonderten Methode implementiert werden.
 	
 	\subsubsection{Darstellung und Bedeutung von Beziehungen}
 	
 	In diesem Abschnitt wird genauer auf die Darstellung und Bedeutung von 
 	Beziehungen zwischen Datenbereichen eingegangen. Die grundlegende
-	Eigenschaften, die einem Deskriptor ermöglichen eine Beziehung darzustellen,
+	Eigenschaft, die einem Deskriptor ermöglichen eine Beziehung darzustellen,
 	wurde bereits im vorhergehenden Abschnitt erklärt. Das Grundprinzip ist eine
 	Selbstreferenz, die in \autoref{fig:selfref} dargestellt ist.
 	
@@ -1040,14 +1048,14 @@
 	varchar kann verallgemeinert als Zeichenkette interpretiert werden. Die
 	Elemente existieren nur in dieser Form aufgrund der Natur des Diagramms.
 	Der wichtige Aspekt ist die Selbstreferenz. Über den Fremdschlüssel
-	\emph{parent} wird ein Objekt des gleichen Typs referenziert. Dies erlaubt
-	uns einen Baum von beliebiger Tiefe zu erstellen. Ein Vater kann auch
-	auch beliebig viele Kinder haben, währendes ein Kind nur einen Vater besitzen
+	\emph{parent} wird ein Objekt des gleichen Typs referenziert. Dadurch kann
+	einen Baum von beliebiger Tiefe erstellen werden. Ein Vater kann 
+	auch beliebig viele Kinder haben, während ein Kind nur einen Vater besitzen
 	kann. \\
 	
-	Folgenden soll die Anwendung dieses Modells auf die in Abschnitt \ref{sec:social}
-	besprochenen Social Media Formaten angewandt werden. Es wird gezeigt, wie es
-	konzeptionell angewandt werden kann.
+	Im Folgenden soll die Anwendung dieses Modells auf die in Abschnitt
+	\ref{sec:social} besprochenen Social Media Formate angewandt werden. 
+	Es wird gezeigt, wie es	konzeptionell angewandt werden kann.
 	
 	\paragraph{Chat}\mbox{} \\
 	
@@ -1056,25 +1064,27 @@
 	für Beziehungen von Chats.
 
 	\begin{figure}[H]
-		\includegraphics[width=\linewidth]{../Bilder/chat_rel.jpg}
+		\centerline{
+			\includegraphics[scale=0.67]{../Bilder/chat_rel.jpg}
+		}
 		\caption{Beziehungen von Deskriptoren für Chats}
 		\label{fig:chat_rel}
 	\end{figure}
 	
 	Hier existiert genau eine Vater-Kind Beziehung. Dabei ist die
-	Wurzeln des Baumes nur ein Anker, der andere Deskriptoren zusammenfasst.
-	Geht man nach \autoref{fig:chat_rel}, so ist es möglich alle Chats
-	zu finden, indem man alle Kinder des Deskriptor Chat findet. Das
+	Wurzel des Baumes nur ein Anker, der andere Deskriptoren zusammenfasst.
+	Geht man nach \autoref{fig:chat_rel} so ist es möglich, alle Chats
+	zu finden, indem man alle Kinder des Deskriptor Chats findet. Das
 	Vaterelement soll hierbei keine Informationen oder Kontextpunkte
-	beschrieben. Es dient lediglich der Zuordnung. Der Kontext kann somit als
-	leer angesehen werden. Alle Kindelemente des Deskriptor Chat hingeben
+	beschreiben. Es dient lediglich der Zuordnung. Der Kontext kann somit als
+	leer angesehen werden. Alle Kindelemente des Deskriptor Chat hingegen
 	beschreiben genau einen Chat. Die zugehörigen Kontextpunkte sind somit die
 	Einträge in dem Chat. Die Beziehung zwischen Deskriptoren wird hier 
 	ausschließlich für die Zuordnung zu einer Obergruppe genutzt. 
 		
 	\paragraph{Forum und Dateisysteme}\mbox{} \\
 	
-	Forum und Dateisysteme gleichen sich in ihrer Baumartigen Struktur. Sie können
+	Forum und Dateisysteme gleichen sich in ihrer baumartigen Struktur. Sie können
 	daher ein ähnliches Modell verwenden. Zum einen gibt es die Einordnung
 	in eine Ebene, wie ein Unterforum oder Verzeichnis. Auf der anderen
 	Seite gibt es die Elemente, welche die eigentlichen Daten enthalten. \\
@@ -1083,30 +1093,33 @@
 	Einordnung von Unterforen und Threads in ein Forum darstellt.
 	
 	\begin{figure}[H]
-		\includegraphics[width=\linewidth]{../Bilder/forum_rel.jpg}
+		\centerline{
+			\includegraphics[scale=0.65]{../Bilder/forum_rel.jpg}
+		}
 		\caption{Beziehungen von Deskriptoren eines Forum}
 		\label{fig:forum_rel}
 	\end{figure}
 	
-	Abgebildet wird die Baumstruktur. Es wird an einer Wurzel begonnen und
+	Abgebildet ist die Baumstruktur. Es wird an einer Wurzel begonnen und
 	die Beziehungen zeigen auf, welche Unterforen von da an existieren. Die
 	Deskriptoren können, wie beim Chat Deskriptor, leer sein und nur zur
 	Darstellung der Beziehung verwendet werden. Zumindest Blätter müssen
 	allerdings eine Menge an Kontextpunkten beschreiben. Per Konzept ist ein Thread 
 	eine Menge von Kontextpunkten, wobei jeder Punkt genau einem Post entspricht.
 	Demzufolge können leere Deskriptoren als reine Unterforen angesehen werden.
-	Nicht leere Deskriptoren hingegen schrieben immer Threads. Ein nicht
+	Nicht leere Deskriptoren hingegen schreiben immer Threads. Ein nicht
 	leerer Deskriptor mit einer Beziehung beschreibt Threads und Unterforen. \\
 	
-	Die Struktur von Dateisystem ist gleich der eines Forum. \autoref{fig:file_rel}
-	zeigt die Beziehungen für Verzeichnisse und Dateien.
-	
 	\begin{figure}[H]
-		\includegraphics[width=\linewidth]{../Bilder/file_rel.jpg}
+		\centerline{
+			\includegraphics[scale=0.9]{../Bilder/file_rel.jpg}
+		}
 		\caption{Beziehungen von Deskriptoren in einem Dateisystem}
 		\label{fig:file_rel}
 	\end{figure}	
 	
+	\autoref{fig:file_rel} zeigt die Beziehungen für Verzeichnisse und Dateien.
+	Die Struktur von diesen ist gleich der eines Forums. 
 	Der konzeptionelle Unterschied zwischen Dateisystem und Forum ist hier, 
 	dass ein Kontextpunkt immer genau eine Datei beschreibt, anstatt dass ein
 	Thread eine Reihe von Kontextpunkten ist.\\
@@ -1126,7 +1139,6 @@
 	dieses ermöglicht. Im folgenden ist beschrieben, welche Aufgaben sie erfüllen
 	soll.
 	
-	\newpage
 	\begin{itemize}
 		\item \textbf{Speichern und laden der Deskriptoren:} Das Schema soll die
 		 Deskriptoren an der Wissensbasis speichern und aus dieser laden können.
@@ -1169,15 +1181,7 @@
 	Bevor ein Algorithmus entworfen wird sollen die Mängel der aktuellen 
 	Synchronisation besprochen werden. \autoref{fig:sync_now} zeigt nochmal eine
 	Skizze des Algorithmus des SyncKP aus Abschnitt \ref{sec:SyncKB}. Für 
-	eine Erklärung des sequenziellen Ablauf siehe \autoref{fig:SyncSeq}.
-	
-	\begin{figure}[H]
-		\centerline{
-			\includegraphics[scale=0.495]{../Bilder/sync_flaws.jpg}
-		}
-		\caption{Skizze: Synchronisation Algorithmus der aktuellen SyncKB}
-		\label{fig:sync_now}
-	\end{figure}
+	eine Erklärung des sequenziellen Ablauf siehe \autoref{fig:SyncSeq}. \\
 	
 	In der aktuellen Form zeigt der Algorithmus der SyncKB zwei gravierende Mängel
 	auf.
@@ -1194,6 +1198,12 @@
 		Dem Namen dieser Arbeit nach ist allerdings eine partiellen Synchronisation
 		erwünscht.		
 	\end{enumerate}
+	
+	\begin{figure}[H]
+		\includegraphics[width=\linewidth]{../Bilder/sync_flaws.jpg}
+		\caption{Skizze: Synchronisation Algorithmus der aktuellen SyncKB}
+		\label{fig:sync_now}
+	\end{figure}
 	
 	\subsubsection{Abstraktion von der SyncKB}
 	
@@ -1226,6 +1236,167 @@
 		extrahiert wird. 
 	\end{itemize} 	
 	
+	\subsubsection{Eliminierung des Piggyback Algorithmus}
+	\label{sec:piggyback}
+	
+	Wie in \autoref{fig:SyncSeq} aus Abschnitt \ref{sec:SyncKB} zu sehen ist
+	benutzt die aktuelle SyncKB Implementierung einen Piggyback Algorithmus.
+	Sinn dieses ist es den Datenaustausch möglichst gering zu halten. Erste Test
+	mit einer abstrakten Version der SyncKP Klasse haben aber gezeigt, dass
+	dies zu einer langen Laufzeit des Algorithmus führe kann, selbst wenn die
+	Daten nur lokal ausgetauscht werden. Dieser führte sogar in vielen Fällen
+	zu einer SocketException mit der Fehlerbeschreibung \emph{Software caused
+	connection abort: socket write error}. Dadurch wurde der Algorithmus abgebrochen
+	ohne das Wissen gesendet wurde und die Synchronisation schlug fehl. 
+	Nach einem Post auf stackoverflow \cite{sockError} kann dies auftreten, wenn 
+	der Empfänger nie den Empfang der Daten bestätigt. Da der Fehler nach der
+	Vereinfachung verschwand ist anzunehmen, dass die Komplexität des Algorithmus
+	gekoppelt mit weiteren Algorithmen zur partiellen Synchronisation die Ursache
+	hierfür ist. Aus diesem Grund wurde der Piggyback Algorithmus entferne.\\
+	
+	In \autoref{fig:sync_flow_concept} ist der, verglichen mit \autoref{fig:SyncSeq},
+	vereinfachten Algorithmus skizziert.
+	
+	\begin{figure}[H]
+		\includegraphics[width=\linewidth]{../Bilder/sync_flow_concept.jpg}
+		\caption{Vereinfachter Algorithmus zur Synchronisation}
+		\label{fig:sync_flow_concept}
+	\end{figure}
+	
+	Der Ablauf wurde auf folgende Schritte vereinfacht:
+	
+	\begin{enumerate}
+		\item \textbf{Interesse senden:} Wie im alten Algorithmus versendet Alice
+		zuerst ein Interesse an einer Synchronisation.
+		\item \textbf{Daten extrahieren:} Bob erreicht diese Interesse. Bob
+		wird nun explizit das Wissen extrahieren. Er macht keinen Vorschlag an
+		möglichen Kontextpunkten sondern sendet das Wissen direkt zu. Auch
+		hier werden wieder alle Kontextpunkte und zugehörige Themen und Peer 
+		gesendet, die nach dem letzten Treffen mit dem Kommunikationspartner
+		aktualisiert wurden.
+		\item \textbf{Wissen senden:} Das gesamte Wissen wird nun an Alice gesendet.
+		Alice prüft nicht mehr, welche Kontextpunkte sie benötigt und stellt auch
+		keine Anfrage nach bestimmten Kontextpunkten mehr. Die erhält alles, was
+		Bob extrahiert hat.
+		\item \textbf{Daten filtern und einfügen:} Alice überprüft nun, welche
+		Kontextpunkte sie einfügen will. Dies ist identisch zu dem Algorithmus,
+		der im rechten Teil von \autoref{fig:SyncFlow} skizziert und unter der
+		Abbildung erklärt ist.
+	\end{enumerate} 	
+		
+	Vorteil dieser Eliminierung ist, dass der Algorithmus leichter zu verstehen ist 
+	und	der Quellcode somit leichter gewartet werden kann. Nachteil ist, dass
+	potenziell eine große Menge an Wissen versendet werden, der 
+	Kommunikationspartner aber nur einen geringen Teil einfügt. Dies ist aber
+	dem erzeugen eines Fehlers vorziehen. Besonders, da in der zu entwickelnden
+	Softwarekomponente nur Teilbereiche von Wissensbasen synchronisiert werden
+	sollen. Daher kann davon ausgegangen werden, dass die Datenmenge generell
+	relativ klein ausfallen. Zusätzlich ist es einen Nutzer leicht verständlich zu
+	machen, dass das Senden von großen Datenmenge eine gewisse zeit beanspruchen
+	kann. Dies kennt er eventuell von dem versenden von E-Mails mit großen Anhängen.
+	Eine lange Laufzeit einer Sequenz von Befehlen ist eher selten verständlich für
+	Nutzer.	 
+	
+	\subsubsection{Ein synchronisierbares Schema}
+	
+	Das Schema ist nicht von sich aus synchronisierbar. Grund hierfür ist, dass es
+	auf einer einfachen Wissensbasis beruht. Für die Synchronisation wird aber
+	eine Wissensbasis benötigt, die als SyncKB implementiert ist. Da diese aber,
+	wie in Abschnitt \ref{sec:SyncKB} erklärt, nur ein Wrapper ist, kann hier per
+	Ableitung  eine	Kindklasse erstellt werden. Diese nimmt anstatt einer normalen
+	Wissensbasis nur eine SyncKB entgegen und bietet eine Methode an diese per
+	Getter vom Schema zu erhalten. Da bei der Synchronisation oft der Eigentümer
+	der Wissensbasis benötigt wird soll dieser ebenfalls überprüft werden. Wenn
+	dieser fehlen, so soll bei der Initialisierung einen Fehler auftreten. \\
+	
+	Über diesen einfachen Schritt wird ein Schema erzeugt, das immer auf einer
+	SyncKB beruht und dessen Wissensbasis immer einen Eigentümer hat. Die
+	abgeleitete Klasse ist somit ein Vertrag zur Versicherung, dass diese
+	Bedingungen erfüllt sind.
+	
+	\subsubsection{Ein künstliches Interesse}
+	\label{sec:artificial_interest}
+	
+	Wie bei der ursprüngliche Implementierung der SyncKB soll auch hier ein
+	künstliches Interesse genutzt werden. Der Grund hierfür ist, dass ein
+	Interesse im Shark Framework keinen Platz für Metadaten bietet. \\
+	
+	Die Dimensionen sind nachfolgend beschrieben. \autoref{fig:artificial_context}
+	zeigt eine Skizze für den Aufbau des künstlichen Interesses.
+	
+	\begin{itemize}
+		\item \textbf{Topics:} Die Topics Dimension soll genau ein SemanticTag
+		enthalten. Dieses ist ein Thema, dass keiner Beschreibung
+		dient. An diesen sollen nur Properties gesetzt werden, die Metadaten
+		entsprechen. Der Deskriptor selbst soll als XML an ihr gespeichert werden.
+		Somit wird die Topics Dimension zu einer Metadaten Dimension umdefiniert.
+		In dieser Dimension wird sich daher auch immer nur dieses eine Thema finden,
+		welches die Metadaten hält.
+		\item \textbf{Peers:}  Die Peers Dimension stellt die Person da, die das
+		Interesse an einer Synchronisation versendet. Geplant ist, dass dies
+		immer nur ein einzelne Person ist. Genauer der eigen Eigentümer
+		des Schemas, zu dem der Deskriptor gehört.
+		\item \textbf{Remote Peers:} Die Remote Peers Dimension sind die Personen,
+		bei denen eine Synchronisation angefragt wird. Das heißt von diesen
+		Personen wird Wissen empfangen und eventuell in die Wissensbasis eingefügt.
+		Gegenüber anderen Dimension können sich in dieser mehre Elemente befinden.
+		Das heißt man kann sich mit mehren anderen Personen synchronisieren.
+		Die aktuellste Daten werden dabei in die Wissensbasis eingefügt.
+		\item \textbf{Direction:} Die Direction Dimension gibt an, ob ein 
+		Knowledge Port aktiv ist. Dies kann ähnlich einer Subscription gesehen
+		werden.	Ist ein Knowledge Port abonniert, so wird dieser Daten versenden 
+		und	empfangen. Dies entspricht dem Verhalten der Direction INOUT. Ist ein
+		Knowledge Port nicht abonniert, so wird er weder Daten senden noch sie
+		empfangen. Dies entspricht dem Verhalten der Direction NOTHING.
+	\end{itemize} 	
+	
+	Die Dimensionen Originator, Times und Locations sind für den
+	Algorithmus zur	Synchronisation unerheblich und bleiben daher leer.
+	
+	\begin{figure}[H]
+		\includegraphics[width=\linewidth]{../Bilder/artificial_context.jpg}
+		\caption{Skizze: Künstliches Interesse für partielle Synchronisation}
+		\label{fig:artificial_context}
+	\end{figure}
+	
+	\subsubsection{Pull und Pull Request}
+	\label{sec:pull}
+	
+	In dieser Arbeit, sowie in der Implementierung der vorhandenen SyncKB, ist
+	von Synchronisation die Rede. In der Realität ist der beschriebene 
+	Algorithmus aber eher einem Pull, bekannt aus der Versionsverwaltung
+	Software Git, gleichzusetzen. Dies bedeutet, dass Die Synchronisation
+	einseitig ist. Nur der Peer, welcher das Interesse sendet, bekommt Daten
+	zugesandt. Die Wissensbasis des Peers, der die Daten sendet, ändert sich nicht.
+	Das heißt, dass Peer A alle Daten, die durch einen Deskriptor beschrieben sind,
+	von Peer B erhalten wird. Peer B hingegen wird eventuell nicht alle Daten von
+	Peer A besitzt, die durch den Deskriptor beschrieben sind.
+	
+	\newpage
+	Zu diesem Zweck soll in zwei Aktionen unterschieden werden: 
+	Pull und Pull Request.
+	
+	\begin{itemize}
+		\item \textbf{Pull:} Ein Pull entspricht dem in
+		\autoref{fig:sync_flow_concept} skizzierten Algorithmus. Hier werden
+		Daten von einem entfernten Peer geholt und in die eigene Wissensbasis
+		eingefügt. Der Kommunikationspartner erhält keine Daten und somit ändert
+		sich sein Datenbestand nicht.
+		\item \textbf{Pull Request:} Ein Pull Request ist nichts anderes als eine
+		anderes Person um ein Pull zu bitten. Dies hat zur Folge, dass diese
+		Person alle Daten vom Antragsteller bekommt. Der eigene Datenbestand 
+		ändert sich hier nicht. Nur die Wissensbasis der der Person, welche die
+		Anfrage erhält, wird aktualisiert.	
+	\end{itemize} 
+	
+	Eine vollständige Synchronisation wäre somit ein Pull gefolgt von einem
+	Pull Request. Im Rahmen dieses Konzeptes soll dies nicht implementiert werden.
+	Grund hierfür ist, dass zum	Zeitpunkt dieser Arbeit keine Möglichkeit besteht 
+	zu erkennen, wann die Kommunikation eines Knowledge Port beendet ist. 
+	Daher ist nicht klar, wann ein Pull beendet ist und der Pull Request gestartet 
+	werden kann. Dieser Aspekt wird somit als Mangel des zugrundeliegenden
+	Algorithmus gesehen und aus zeitlichen Gründen vernachlässigt.
+	
 	\newpage
 	\section{Implementierung}
 	
@@ -1250,12 +1421,13 @@
 	zeigt das Klassendiagramm beider.
 	
 	\begin{figure}[H]
-		\includegraphics[width=\linewidth]{../Bilder/impl_schema.jpg}
+		\centerline{
+			\includegraphics[scale=0.53]{../Bilder/impl_schema.jpg}
+		}
 		\caption{Klassendiagramm: Deskriptor und Schema}
 		\label{fig:impl_schema}
 	\end{figure}	
 	
-	\newpage
 	Konstruktoren und private Methoden wurden hier vernachlässigt. Eine
 	explizite Beschreibung aller Klassen kann der JavaDoc Dokumentation gefunden
 	werden (siehe \autoref{sec:CD}). \\
@@ -1310,6 +1482,7 @@
 	Ein Schema basiert immer auf einer Wissensbasis, aus der die Daten geladen und
 	gespeichert werden. Des weiteren besitzt sie folgende Features:
 	
+	\newpage
 	\begin{itemize}
 		\item \textbf{Speichern und Laden von Deskriptoren:} Deskriptoren können
 		an der Wissensbasis, die das Schema verwendet, gespeichert und
@@ -1322,7 +1495,6 @@
 		unterschiedliche Identifikatoren. Das Speichern eines Deskriptor mit dem
 		gleichen Identifikator wie ein bereits existierender Deskriptor
 		kommt einem Überschrieben gleich.
-		\newpage
 		\item \textbf{Konfigurieren von Vater-Kind Beziehungen:} Über die Methoden 
 		addChild, addChildren, setParent können Vater-Kind Beziehungen aufgebaut
 		werden. Zu beachten ist, dass ein Deskriptor immer nur einen Vater
@@ -1365,10 +1537,11 @@
 			"To avoid the overhead involved in creating a JAXBContext instance,
 			a JAXB application is encouraged to reuse a JAXBContext instance."
 		\end{quote}
-	}
-	
-	Aus diesem Grund wurde das Factory Pattern für die Erstellung eines JAXBContext
-	benutzt. \autoref{fig:factory} skizziert dieses.
+	} 
+
+	\newpage
+	Aus diesem Grund wurde das Factory Pattern für die Erstellung eines
+	JAXBContext	benutzt. \autoref{fig:factory} skizziert dieses.
 	
 	\begin{figure}[H]
 		\includegraphics[width=\linewidth]{../Bilder/factory.jpg}
@@ -1392,9 +1565,9 @@
 	DescriptorAlgebra geschrieben. Diese hält nur statische Methoden, welche die
 	entsprechenden drei Extraktionen ausführen. 
 	
-	\paragraph{Extraktion des Kontext eines Deskriptor}\mbox{} \\
+	\paragraph{Extraktion des Kontextes eines Deskriptor}\mbox{} \\
 	
-	Für den Algorithmus der Extraktion des Kontext eines Deskriptor wird
+	Für den Algorithmus der Extraktion des Kontextes eines Deskriptor wird
 	die vom Shark Framework bereitgestellte Klasse SharkCSAlgebra genutzt.
 	Die Kontextpunkte werden anhand des Kontextes des Deskriptor und einer
 	übergeben Wissensbasis extrahiert.
@@ -1416,6 +1589,7 @@
 	Gleichheitsprüfung erfolgt über die von Object gerbte equals Methode einer jeden
 	Java Klasse.
 	
+	\newpage
 	\paragraph{Extraktion des gesamten Baumes:}\mbox{} \\
 	
 	Bei der Extraktion des gesamten Baumes wird zuerst die Wurzel gesucht. Das heißt
@@ -1434,12 +1608,151 @@
 		\label{fig:extraction}
 	\end{figure}	
 	
-	\newpage
 	\subsection{Synchronisation von durch Deskriptoren beschriebenen Datenbereichen}	
 	
 	Im folgenden Abschnitt werden die Techniken und Algorithmen besprochen, die
 	zur Synchronisation von durch Deskriptoren beschriebenen Datenbereichen genutzt
 	werden.
+	
+	\subsubsection{Die abstrakte Klasse AbstractSyncKP}
+	
+	Die Klasse SyncKP wurde abstrahiert um sie allgemeiner einsetzen zu können.
+	Die erwähnten Eliminierung des Piggyback Algorithmus aus Abschnitt
+	\ref{sec:piggyback} ist hierbei die größte Änderungen. Dadurch fallen die 
+	Phasen Angebot und Anfrage weg. Außerdem hat die neue Klasse
+	AbstractSyncKP einige neue Methoden. Die Wichtigsten sind im Klassendiagramm
+	in \autoref{fig:AbstractSyncKP} dargestellt.
+	
+	\begin{figure}[H]
+		\centerline{
+			\includegraphics{../Bilder/AbstractSyncKP.jpg}
+		}
+		\caption{Klassendiagramm: AbstractSyncKP}
+		\label{fig:AbstractSyncKP}
+	\end{figure}	
+	
+	Die abstrakten Methoden besitzen die Sichtbarkeit protected. Sie 
+	müsse von jeder Kindklasse implementiert werden. In
+	\autoref{fig:abstract_algorithm} ist hervorgehoben, wo
+	die Methoden während der Synchronisation Verwendung finden werden. 
+	
+	\begin{figure}[H]
+		\includegraphics[width=\linewidth]{../Bilder/abstract_algorithm.jpg}
+		\caption{Ablauf einer Synchronisation}
+		\label{fig:abstract_algorithm}
+	\end{figure}	
+		
+	\newpage
+	\begin{itemize}
+		\item \textbf{Interesse bekunden:} Zuerst muss herausgefunden werden,
+		ob das erhaltene Interesse überhaupt relevant ist. Die Implementierung
+		hierzu ist jedem Entwickler selbst überlassen. So kann beispielsweise
+		gegen eine Blacklist geprüft werden, da man mit bestimmten Personen
+		gar nicht kommunizieren möchte. Natürlich muss hier auch implementiert 
+		werden, ob das erhaltene Interesse überhaupt ein Interesse zur
+		Synchronisation ist. Nur wenn diese Methode true zurückliefert werden
+		weitere Aktionen durchgeführt.
+		\item \textbf{Wissen extrahieren:} Die Extraktion des benötigten Wissen 
+		kann sich je nach Einzelfall unterscheiden. Dem Entwickler wird hier die
+		Freiheit gelassen, wie er dies implementieren möchte. Das hier 
+		erhaltene Wissen wird noch einmal gefiltert und nur Daten, die sich seit
+		dem letzten Treffen mit mit dem Kommunikationspartner geändert haben,
+		werden versandt.
+		\item \textbf{Identifikator finden:} Der Identifikator wird benutze
+		um Metadaten zu speichern und zu versenden. Dabei ist dieser nicht
+		identisch mit dem Identifikator eines Deskriptor. Vielmehr handelt es
+		um ein SematicTag, das in einer der Dimensionen des Interesses des
+		Knowledge Port existiert.
+	\end{itemize}
+	
+	Man beachte, dass der Identifikator im eigentlichen Algorithmus
+	keine Funktion hat. Er wird	benutzt um zwischen den Aktionen Pull und Pull
+	Request zu unterscheiden, die im Folgenden erklärt sind.	
+
+	\paragraph{Aktionen Pull und Pull Request}\mbox{} \\
+	
+	Wie in Abschnitt \ref{sec:pull} erklärt existieren zwei Arten um eine
+	Synchronisation durchzuführen. Pull und Pull Request. Ein Pull ist der in
+	\autoref{fig:abstract_algorithm} dargestellte Ablauf. Ein Pull Request ist
+	eine Bitte an einen Kommunikationspartner diesen Algorithmus zu starten. \\
+	
+	Implementiert sind die Aktionen in den Methoden pull und pullRequest. Um
+	zu ermitteln welche Aktion ausgeführt werden soll findet eine Prüfung von
+	Metadaten statt. Diese sind am Identifikator des erhaltenen Interesses
+	als Property gespeichert. Dabei gilt: Ist die Property leer, so entspricht
+	dies der Aktion Pull. Für andere Aktionen, wie dem Pull Request, wird die
+	Property auf Gleichheit mit bestimmten vordefinierten Zeichenketten überprüft.
+	
+	Die beiden Aktionen werden daher wie folgt gestartet:
+	
+	\begin{itemize}
+		\item \textbf{Pull:} Da die Nichtexistenz einer Aktion einem Pull 
+		entspricht wird die Kommunikation ohne weitere Vorbereitungen eingeleitet.
+		Der Kommunikationspartner erkennt, dass keine Aktion definiert wurde und
+		starten den Ablauf eines Pull.
+		\item \textbf{Pull Request:} Vor der Kommunikation wird die Aktion
+		Pull Request im zugehörigen Metadaten am Identifikator gesetzt. Nach dem
+		Senden wird dieses Feld wieder entfernt. Der Kommunikationspartner 
+		liest die Metadaten und erkennt die Aktion Pull Request. Daraufhin wird
+		er die Methode pull an sich selbst aufrufen, wodurch er selbst ein
+		Pull ausführt.
+	\end{itemize} 
+		
+	\subsubsection{Ein abstrakte Klasse als Basis}
+	
+	Um eine möglichst allgemeine Form zu wahren und das entwickelte Klassenkonstrukt
+	für viele Fälle anwendbar zu machen wurde eine weitere abstrakte Klasse
+	geschrieben, die von AbstractSyncKP erbt. Sie ist in der folgenden
+	\autoref{fig:desc_sync} zu sehen.
+	
+	\begin{figure}[H]
+		\includegraphics[width=\linewidth]{../Bilder/desc_sync.jpg}
+		\caption{Klassendiagramm: AbstractDescriptorSyncKP}
+		\label{fig:desc_sync}
+	\end{figure}	
+	
+	Die neue Klasse AbstractDescriptorSyncKP implementiert zwei der drei
+	abstrakten Methoden von AbstractSyncKP. Dies bedeutet, dass Entwickler
+	nur noch das extrahieren von Wissen übernehmen müssen. Die anderen
+	Zwei funktionieren wie folgt:
+	
+	\begin{itemize}
+		\item \textbf{Interesse bekunden:} Weitere Aktionen werden nur ausgeführt,
+		wenn der gesendete Deskriptor gleich mit dem von der Klasse gehaltenen
+		Deskriptor ist. Gleich bezieht sich hierbei auf die Gleichheit der
+		Identifikatoren dieser.
+		\item \textbf{Identifikatoren finden:} Der Identifikatoren des Knowledge
+		Port ist ein künstliche Thema, das in der Topic Dimension des Interesse
+		dieses angelegt wurde. Genaueres ist in folgenden der Erklärung zum 
+		künstlichen Interesse beschrieben.
+	\end{itemize} 
+	
+	\paragraph{Nutzung eines künstlichen Interesses}\mbox{} \\
+	
+	Wie in Abschnitt \ref{sec:artificial_interest} beschrieben wird ein künstlichen
+	Interesse genutzt. Die Klasse AbstractDescriptorSyncKP baut daher besagtes
+	Interesse anhand des übergebenen Deskriptor wie folgt auf. 
+	
+	\begin{itemize}
+		\item \textbf{Topics:} Die Topics Dimension besteht aus einem künstlich
+		angelegten Thema. Dieses Thema dient zur dem Zweck Metadaten zu halten.
+		\item \textbf{Peers:} Die Peers Dimension einhält den Eigentümer der
+		Wissensbasis, auf welchem das Schema zum Deskriptor beruht.
+		\item \textbf{Remote Peers:} Die Remote Peers Dimension wird entweder
+		vom Konstruktor übernommen (siehe nachfolgende Erläuterung) oder, sollten
+		keine Empfänger übergeben worden sein, entspricht der Remote Peers Dimension
+		des Deskriptor, den diese Klasse hält.
+		\item \textbf{Direction:} Die Direction Dimension entspricht initial
+		immer INOUT. Eine Umschaltung zwischen INOUT und NOTHING ist zu jeder Zeit
+		möglich.
+	\end{itemize}
+	
+	Die anderen Dimensionen sind, entsprechend des Konzeptes, leer.
+	
+	\paragraph{Konstruktoren von AbstractSyncKP und AbstractDescriptorSyncKP}
+	\mbox{} \\
+	
+
 	
 	\newpage
 	\section{Tests}
