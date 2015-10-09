@@ -82,7 +82,10 @@
 	Enthüllungen Edward Snowdens gegen Ende Mai 2013 stellt sich hier die Frage
 	der Sicherheit der persönlichen Daten. Die meisten sozialen Netzwerke basieren
 	auf einer Client-Server Architektur. Dies bedeutetet, dass alle Daten auf einem
-	entfernten Server gespeichert sind. Besonders brisant ist dies aufgrund eines
+	entfernten Server gespeichert sind. In Bezug auf den Datenschutz muss sich der
+	Nutzer somit auf den Betreiber verlassen, wobei die
+	Server in anderen Ländern stehen können und somit andere Gesetze gelten.
+	Besonders brisant ist dies aufgrund eines
 	Urteils des Europäischen Gerichtshofes, laut dem die Vereinigten Staaten kein
 	sicheres Land für den Datenschutz aller Bürger Europas sind. \cite{welt} \\
 	 
@@ -114,10 +117,8 @@
 	sie beispielsweise in einer grafischen Oberfläche auszugeben. Hierbei
 	ist darauf zu achten, dass die Beschreibung so abstrakt gewählt wird, dass 
 	sie	auf möglichst viele Fälle, wie die erwähnte Möglichkeit der 
-	Implementierung von Chats oder Foren, anwendbar ist. \\
-	Als Beweis der Funktionalität der Softwarekomponente soll schließlich
-	ein Chat mit grafischer Oberfläche entwickelt werden, in dem einzelne Peers sich
-	miteinander	unterhalten können.\\
+	Implementierung von Chats oder Foren, anwendbar ist. Als Beweis für die
+	Funktionalität der Softwarekomponente werden Unit-Test geschrieben. \\
 	
 	Die Arbeit erläutert zuerst die Grundlagen, wie zum Beispiel das Shark Framework
 	\cite{SharkFW},	auf denen die Implementierung beruhen wird. 
@@ -1206,6 +1207,7 @@
 	\end{figure}
 	
 	\subsubsection{Abstraktion von der SyncKB}
+	\label{sec:sync_abstract}
 	
 	Aufgrund der im letzten Abschnitt beschrieben Mängel soll eine Abstraktion der
 	SyncKB vorgenommen werden. Genauer soll die Klasse SyncKP abstrahiert werden.
@@ -1396,6 +1398,78 @@
 	Daher ist nicht klar, wann ein Pull beendet ist und der Pull Request gestartet 
 	werden kann. Dieser Aspekt wird somit als Mangel des zugrundeliegenden
 	Algorithmus gesehen und aus zeitlichen Gründen vernachlässigt.
+	
+	\subsubsection{Eine weitere Abstraktionsebene}	
+	
+	Neben der Abstraktion des SyncKP ist eine weitere Abstraktionsebene geplant.
+	Das künstliche Interesse sowie die Nutzung der Deskriptoren soll ist in
+	dieser Ebene. \autoref{fig:ebene} Zeigt eine Skizze der Abstraktionsebenen,
+	die verwendet werden sollen.
+	
+	\begin{figure}[H]
+		\centerline{
+			\includegraphics[scale=0.6]{../Bilder/ebene.jpg}
+		}
+		\caption{Skizze: Abstraktionsebenen}
+		\label{fig:ebene}
+	\end{figure}	
+	
+	In der ersten Ebene liegt der eigentliche Algorithmus zur Synchronisation.
+	In der zweiten Ebene wird dieser so angepasst, dass er auf Grundlage
+	eines Deskriptor geschieht. Die letzte Ebene wird von Entwickler selbst
+	implementiert. Sie enthält alle Funktionen, die vom Anwendungsfall abhängen. \\
+	
+	Geplant ist, dass Deskriptor Ebene folgende Funktionen anbietet bzw. übernimmt:
+		\begin{itemize}
+		\item \textbf{Senden eines Deskriptors:} Sollte der Deskriptor geändert
+		werden, so kann die Änderung an die Kommunikationspartner
+		verteilt werden. Die anderen Peers überschrieben dabei den Deskriptor
+		in ihrem Schema mit dem neuen Inhalt.
+		\item \textbf{Senden von geänderten Adressaten:} Die Personen, mit 
+		denen eine Synchronisation erfolgen soll, können sich ändern. Die
+		Deskriptor Ebene bietet an Adressaten hinzuzufügen und zu entfernen.
+		Wie mit dieser Änderung umzugehen ist muss allerdings jeder Entwickler
+		in der letzten Ebene selbst bestimmt.
+		\item \textbf{Finden des Identifikators:} Es wird das künstliche Interesse
+		genutzt. Das Thema in der Topic Dimension, das die Metadaten hält, soll
+		dabei als Identifikator dienen.
+		\item \textbf{Interesse bekunden:} Die Deskriptor Ebene übernimmt das
+		Prüfen des Interesses. Sie entscheidet, ob eine Kommunikation stattfindet.
+		Dies ist der Fall, wenn die Deskriptoren die Gleichheit aufweisen, also
+		ihr Identifikator gleich ist.
+		\item \textbf{Subskription:}  Je nach Status einer Subskription wird der
+		Knowledge Port Daten versenden und empfangen oder inaktiv sein.		
+	\end{itemize} 
+	
+	Für die eigene Implementierung durch den Entwickler bleiben somit folgende
+	Tätigkeiten übrig:
+	
+	\begin{itemize}
+		\item \textbf{Senden eines Deskriptors:} Der Entwickler bestimmt, wie
+		genau Daten extrahiert werden. Die einspricht dem Zusammenstellen des
+		Angebotes der Abstraktion des SyncKP (vergleiche Abschnitt
+		\ref{sec:sync_abstract}).
+		\item \textbf{Auf geänderten Adressaten reagieren:} Es liegt in der
+		Zuständigkeit eines jeden Entwicklers wie auf Änderungen der Adressaten
+		reagiert wird. Eine entsprechende Vorgehensweise muss implementiert 
+		werden.
+	\end{itemize} 
+	
+	\subsection{Lernen von Deskriptoren}
+	
+	Es wurde ein Konzept zum Aufbau von Deskriptoren, sowie einer Synchronisation
+	auf deren Grundlage erstellt. Da Deskriptoren aber nicht immer vordefiniert
+	vorhanden sein müssen, soll auch ein Konzept zum Lernen dieser erstellt werden. 
+	Dabei soll sich einer sehr einfachen Methode dient werden. \\
+	
+	Um anderen Kommunikationspartner ein Deskriptor beizubringen wird er über
+	einen, von den anderen Algorithmen unabhängigen, Knowledge Port versandt.
+	Dabei nicht der Deskriptor selbst übertragen, sondern sein gesamter Baum.
+	Andere Peers fügen diesen Baum dann in ihr Schema ein. Dabei werden alle
+	existierenden Deskriptoren mit dem gleichen Identifikator überschrieben. 
+	Diese kann natürlich unerwünscht sein, weshalb die entsprechende Klasse
+	so gebaut sein soll, dass über Ableitung eine Anpassung des Verhaltens
+	möglich ist.
 	
 	\newpage
 	\section{Implementierung}
@@ -1624,9 +1698,7 @@
 	in \autoref{fig:AbstractSyncKP} dargestellt.
 	
 	\begin{figure}[H]
-		\centerline{
-			\includegraphics{../Bilder/AbstractSyncKP.jpg}
-		}
+		\includegraphics[width=\linewidth]{../Bilder/AbstractSyncKP.jpg}
 		\caption{Klassendiagramm: AbstractSyncKP}
 		\label{fig:AbstractSyncKP}
 	\end{figure}	
@@ -1697,6 +1769,19 @@
 		er die Methode pull an sich selbst aufrufen, wodurch er selbst ein
 		Pull ausführt.
 	\end{itemize} 
+	
+	\newpage
+	\paragraph{Weitere Aktionen definieren}\mbox{} \\
+	
+	Kindklassen von AbstractSyncKP haben die Möglichkeit weitere Aktionen zu
+	definieren. Hierzu ist die Methode doAction zu überschreiben. Action selbst
+	können vor dem Senden mit setAction gesetzt werden. AbstractSyncKP prüft
+	zuerst seine eigenen Aktionen. Sollte die gesetzte Action keinem Pull
+	oder Pullrequest entsprechen, so wird doAction. In der Standardimplementierung
+	erzeugt dies einen Fehler, da die Klasse nicht weiß, was sie tun soll.
+	Wenn die Methode überschrieben wurde, dann können hier weitere Aktionen
+	geprüft werden. Es ist anzuraten immer super.doAction aufzurufen, wenn keine 
+	Zuordnung der Aktion möglich war.
 		
 	\subsubsection{Ein abstrakte Klasse als Basis}
 	
@@ -1752,7 +1837,122 @@
 	\paragraph{Konstruktoren von AbstractSyncKP und AbstractDescriptorSyncKP}
 	\mbox{} \\
 	
-
+	In \autoref{fig:desc_sync} sind nicht die Konstruktoren der beiden Klassen
+	dargestellt, um platz im Diagramm zu sparen. Dennoch sind diese von Bedeutung.
+	Im folgenden die Parameter für die Konstruktoren der beiden Klassen.
+	
+	\paragraph{AbstractSyncKP}
+	
+	\begin{itemize}
+		\item \textbf{SharkEngine sharkEngine:} Die SharkEngine, welche von
+		dem Port benutzt wird.
+		\item \textbf{SyncKB syncKB:} Die Wissensbasis, an der die Zeitstempel
+		 gespeichert sind.
+		\item \textbf{SharkCS context:} Interesse dieses Ports. Die Remote Peers
+		Dimension wird zu Erstellung der Zeitstempel genutzt.
+	\end{itemize}
+	
+	\paragraph{AbstractDescriptorSyncKP}
+	
+	\begin{itemize}
+		\item \textbf{SharkEngine sharkEngine:} Die SharkEngine, welche von
+		dem Port benutzt wird. Wird an AbstractSyncKP übergeben.
+		\item \textbf{SyncDescriptorSchema schema:} Schema, in welchem sich der
+		Deskriptor befindet.
+		\item \textbf{ContextSpaceDescriptor descriptor:} Deskriptor, der den
+		zu synchronisierenden Datenbereich beschreibt.
+		\item \textbf{PeerSTSet recipients:} Personen, mit denen die 
+		Synchronisation stattfinden soll.
+	\end{itemize}
+	
+	Zu erkennen ist, dass sich nur ein Parameter gleicht und direkt übergeben 
+	werden kann. Aus dem SyncDescriptorSchema kann die SyncKB gelesen und
+	übergeben werden. Das künstliche Interesse wird anhand des Schemas, des
+	Deskriptors und der Empfänger erstellt und dann ebenfalls dem Konstruktor von
+	AbstractSyncKP übergeben. Damit einhält der dieser besagtes Interesse sowie
+	die zum Schema gehörende Wissensbasis.
+	
+	\paragraph{Besonderheiten von AbstractDescriptorSyncKP}\mbox{} \\
+	
+	Die Klasse AbstractDescriptorSyncKP weißt einige Besonderheiten auf. Zum
+	Einen definiert sie zusätzliche Aktionen, zum Anderen haben einige Methoden
+	eine besondere Verhaltensweise.
+	
+	\begin{itemize}
+		\item \textbf{Hinzufügen und entfernen von Adressaten:} Eine Änderung
+		der Remote Peer Dimension am Interesse der Ports hat keine weiteren
+		Aktionen zur folgen. Des müssen die Methoden addRecipient und
+		removeRecipient genutzt werden, damit eine Notifikation
+		der Änderung an die Kommunikationspartner erfolgt. Die Kindklasse von
+		AbstractDescriptorSyncKP muss dabei implementieren, was in diesem
+		Fall zu geschehen hat.
+		\item \textbf{Änderungen Deskriptoren verteilen:} Es ist möglich 
+		Änderungen des aktuell beschriebenen Deskriptors zu verteilen. Dabei 
+		wird der gesamte Baum verteilt und gleiche Deskriptoren beim
+		Ziel überschrieben.
+		\item \textbf{Getter für den Deskriptor:} Der Getter ließt den 
+		Deskriptor direkt aus den Metadaten. Dies bedeutet, er wird aus dem XML
+		erstellt. Somit schlagen sich Änderungen an diesem nicht sofort auf
+		den Port aus. Um eine Änderung am Knowledge Port durchzuführen muss der
+		Setter aufgerufen werden.
+		\item \textbf{Subskription:} Die Methoden subscribe und unsubscribe setzen
+		die Direction Dimension des Ports. Ein abonnierter Port wird immer Daten
+		versenden und Empfangen, währenddessen ein nicht abonnierter Port keine
+		Aktionen durchführt.
+	\end{itemize}
+	
+	\subsubsection{Eine Standardimplementierung}
+	
+	Mit StandardDescriptorSyncKP existiert eine Standardimplementierung, die
+	den einfachsten Fall abdeckt. Die beiden noch zu implementierenden
+	abstrakten Methoden führen folgende Aktionen aus.
+	
+	\begin{itemize}
+		\item \textbf{Zusammenstellen des Angebotes:} Aus der Wissensbasis
+		wird nur das Wissen zum Kontext des im Port gehaltenen Deskriptors
+		extrahiert. Jede Art von Beziehungen findet keine Beachtung.
+		\item \textbf{Änderung von Adressaten:} Die Remote Peer Dimension 
+		wird mit den gesendeten neuen Peers ausgetauscht. Dabei wird
+		der Besitzer des Ports, genauer Besitzer des Schemas, welches am Port
+		gespeichert ist, mit dem Sender ausgetauscht. Ist der Besitzer ein Teil 
+		der neuen Remote Peer Dimension, so bedeutetet dies, dass der Sender der
+		Nachricht mit diesem kommunizieren möchte. Ist der Besitzer nicht in der
+		Liste der neuen Adressaten, so möchte der Sender nicht mehr mit diesem Port
+		kommunizieren und wird daher aus den Adressaten entfernt.
+		\autoref{fig:peer_sync} veranschaulicht den Ablauf noch einmal
+		skizzenhaft in einem Aktivitätsdiagramm.
+	\end{itemize}
+	
+	\begin{figure}[H]
+		\centerline{
+			\includegraphics[scale=0.66]{../Bilder/peer_sync.jpg}
+		}
+		\caption{Skizze: Ablauf der Änderung von Adressaten}
+		\label{fig:peer_sync}
+	\end{figure}	
+		
+	\subsection{Ein Knowledge Port zum Lernen von Deskriptoren}
+	
+	Das Lernen und Lehren von neuen Deskriptoren übernimmt ein Knowledge Port,
+	der völlig unabhängigen zu den bisher vorgestellten Ports operiert.
+	\autoref{fig:assimilation} skizziert die wichtigsten Aspekte der
+	zugehörigen Klasse DescriptorAssimilationKP.
+	
+	\begin{figure}[H]
+		\includegraphics[width=\linewidth]{../Bilder/assimilation.jpg}
+		\caption{Klassendiagramm: DescriptorAssimilationKP}
+		\label{fig:assimilation}
+	\end{figure}	
+	
+	Die Klasse basiert auf einem Schema. Ein Port kann dabei beliebig viele
+	Deskriptoren versenden. Voraussetzung aber ist, dass er sich so identisch 
+	im Schema befinden. Dabei wird nicht der Deskriptoren selbst gesendet sondern
+	sein gesamter Baum. Dies ist notwendig, damit auch Beziehungen von 
+	Kommunikationspartnern erlernt werden. Die Adressaten fügen den
+	Baum dann wie erhalten bei sich ein, wobei bereist existierende Deskriptoren 
+	überschrieben werden. Von Interesse ist auch die isInterested Methode. 
+	Im Standardfall liefert sie immer true zurück kann aber überschrieben werden
+	um zu unterscheiden, wann ein Baum zu assimiliert ist und wann nicht.
 	
 	\newpage
 	\section{Tests}
@@ -1769,38 +1969,57 @@
 	
 	Des Weiteren wurde Cobertura genutzt um die Testabdeckung zu gewährleisten. \\
 	
-  	TODO: Abbildung einfügen + Erklärung
+  	\begin{figure}[H]
+		\includegraphics[width=\linewidth]{../Bilder/code.jpg}
+		\caption{Ausschnitt: Cobertura Report}
+		\label{fig:code}
+	\end{figure}	
+	
+	\autoref{fig:code} zeigt einen Ausschritt des Cobertura Reports. Zu sehen
+	ist, dass die Line Coverage immer rüber 70\% liegt und um Durchschnitt bei 
+	83,8\%. Dies wird als ausreichende Testabdeckung betrachtet.
 	
 	\subsection{Codequalität}
 	\label{sec:pmd}
 	
-	Zur Sicherstellung der Qualität des Quellcodes wurde das Werkzeug PMD genutzt. \\
+	Zur Sicherstellung der Qualität des Quellcodes wurde das Werkzeug PMD genutzt.
+	Ein Report dazu kann auf der beiliegenden CD	
+	(siehe \autoref{sec:CD}) gefunden werden.
+	Genutzt wurde die Standardkonfiguration von PMD. Das heißt die Regeln definiert
+	in basic.xml, unusedcode.xml und imports.xml wurden überprüft. Die einzig
+	auffallende Regelverletzung dabei ist \emph{Useless parentheses}. Dabei
+	handelt es sich im Code um die Zusammenstellung eine booleschen Ausdrucks.
+	Die Klammern dienen der Lesbarkeit. Die \emph{Avoid modifiers which are implied
+	by the context} Warnung wird ebenfalls ignoriert, da sie für die Lesbarkeit
+	als nicht relevant erachtet wird.
 	
-	TODO: Abbildung einfügen + Erklärung
-	
-	\subsection{Umsetzung und Test der Anforderungen }
+	\subsection{Test der Anforderungen }
 	Im folgenden ist beschrieben, wie die Funktionale und nicht funktionale
-	Anforderungen umgesetzt und gestestet wurden.
+	Anforderungen getestet wurden.
 	
 	\paragraph{Funktionale Anforderungen}
 	\begin{itemize}
 		\item \textbf{Beschreibbarkeit:} Die Beschreibbarkeit ist durch den
-		Deskriptor umgesetzt worden. Es existieren Unit Test
-		für diesen, die Fehlerfrei durchlaufen. Des Weiteren zeigt die Chat
-		Anwendung, dass reale Programme mit diesem Hilfemittel geschrieben werden
-		können.
+		Deskriptor umgesetzt worden. Es existieren Unit Test für das Schema
+		von Beziehungen. Durch den fehlerfreien Ablauf dieser ist die
+		Umsetzung dieser Anforderung gesichert.
+		\newpage
 		\item \textbf{Beziehungen:} Die Beziehungen wurden durch das Schema
-		umgesetzt. Auch hier zeigen Unit Tests und die Chat Anwendung die Erfüllung
+		umgesetzt. Die hier existierenden Unit Tests sichern die Erfüllung
 		dieser Anforderung.
 		\item \textbf{Persistenz:} Über das Schema können Beschreibungen gespeichert
 		und geladen werden. Unit Test beweisen, dass diese Anforderung umgesetzt
 		wurde.
-		\item \textbf{Synchronisation:} 
+		\item \textbf{Synchronisation:} Es wurde ein Klassenkonstrukt geschaffen,
+		welches eine Synchronisation auf der Grundlage der entwickelten Deskriptoren
+		ermöglicht. Auch hier beweisen Unit Test deren Funktionalität.
 		\item \textbf{Änderbarkeit:} Deskriptoren besitzen einen Identifikator über
-		den sie Unabhängig von ihres Kontextes auffindbar sind. Somit kann
+		den sie Unabhängig von ihrem Kontext auffindbar sind. Somit kann
 		eine Änderung ohne Verlust des Deskriptor durchgeführt werden. Beweis hierfür
 		sind Unit Tests des Schemas.
-		\item \textbf{Änderung kommunizieren:}
+		\item \textbf{Änderung kommunizieren:} Änderungen können über die
+		Klassen zur Synchronisation kommuniziert werden. Diese wurden anhand
+		von Modultest getestet und daher gilt die Anforderung als umgesetzt.
 	\end{itemize} 	
 	
 	\paragraph{Nicht funktionale Anforderungen}
@@ -1809,21 +2028,104 @@
 		Build-Management gewählt. Das Projekt konnte in eine Netbeans IDE
 		nach dem klonen aus einem Git Repository ohne Probleme importiert werden.
 		Des Weiteren ermöglicht die erstellte Konfiguration das Erstellen von
-		Cobertura und PMD Reports. Somit wurde diese Anforderung umgesetzt.
+		Cobertura und PMD Reports. 
 		\item \textbf{Testbarkeit:} Es existieren Unit Test, daher ist der Quellcode
 		testbar.
 		\item \textbf{Modultest:} Es wurden eine Reihe von Unit Test geschrieben und
-		ein Cobertura Report erstellt. Somit ist diese Anforderung erfüllt.
+		ein Cobertura Report erstellt.
 		\item \textbf{Wartbarkeit:} Der PMD Report erzeugt nur unwesentliche
 		Meldungen, die ignoriert werden können (sie Erklärung in Abschnitt
 		\ref{sec:pmd}). Von daher kann davon ausgegangen werden, dass der Quellcode
 		lesbar ist und somit gewartet werden kann. Für weitere Erklärungen kann
 		die JavaDoc Dokumentation (siehe \autoref{sec:CD}) und diese Arbeit selbst
-		genutzt werden.
+		herangezogen werden.
 	\end{itemize} 
 	
 	\newpage
 	\section{Fazit}
+	
+	In diesem Kapitel soll die Arbeit noch einmal in ihrer Gesamtheit betrachtet
+	werden. Zuerst wird kritisch auf Mängel und Verbesserungsmöglichkeiten
+	eingegangen. Anschließen folgt das Schlusswort, welches die Ergebnisse 
+	bewerte und für zukünftige Projekte einordnet.
+	
+	\subsection{Mängel und Verbesserungsmöglichkeiten}
+	
+	Folgend sind die Mängel und Verbesserungsmöglichkeiten der in dieser Arbeit
+	entstandenen Softwarekomponente im Detail beschrieben.
+	
+	\begin{itemize}
+		\item \textbf{Keine vollständige Synchronisation in einem Schritt:}
+		Es ist nicht gelungen eine vollständige Synchronisation in einem
+		einzigen Schritt zu implementieren. Das Ausführen der Aktionen Pull
+		und Pull Request führt zwar zum gleichen Ergebnis, erfordert
+		aber trotzdem, dass diese einzeln angestoßen werden. Leider ist im
+		Shark Framework sowie im Algorithmus der SyncKB, auf dem aufgebaut wurde, 
+		nicht klar, wann ein Knowledge Port seine Arbeit beendet hat. Daher erfolgt
+		eine vollständige Synchronisation in der entwickelten Softwarekomponente in 
+		zwei Schritten.
+		\item \textbf{Kein Caching:} Die aktuelle Implementierung des Schemas
+		ließt die Deskriptoren bei jeden zugriff aus ihrer persistenten
+		Form. Dies können unter Umständen Dateizugriffe sein, was die Laufzeit
+		der Aktionen erhöht. Auch die Umwandlung von XML in ein Java Objekt bei
+		jeden Zugriff kostet Laufzeit. Ein Caching der Deskriptoren wäre
+		anzuraten, sollte der Quellcode einem Refactoring unterzogen werden.
+		In dieser Arbeit wurde in erster Linie auf Funktionalität Wert gelegt
+		und das Laufzeitproblem deswegen vernachlässigt. 
+		\item \textbf{Keine Test von Multithreading:} Die vorhandenen Modultest
+		beweisen die Funktionalität der Softwarekomponente nur im kleinen Rahmen.
+		Test mit einer großen Anzahl an Personen, die sich synchronisieren wollen,
+		wurden nicht durchgeführt. Das Verhalten in einer Situation dieser Art ist
+		also unklar.
+		\item \textbf{Komplexität:} Die Nutzung eines künstlichen Interesse
+		ist komplex und entspricht nicht dem normalen Vorgehen im Shark
+		Framework. Aufgrund der fehlenden Metadaten-Dimension war dies aber
+		notwendig. Leider ist somit die interne Funktionsweise der
+		Softwarekomponente für Außensehende schwer zu verstehen. Sollte
+		je eine zusätzliche Dimension für Metadaten eingeführt werden, so ist
+		ein Refactoring des künstlichen Interesses anzuraten.
+		\item \textbf{Schema als Sammlung von Bäumen:} Das Schema ist aktuell
+		eine Sammlung von Baumstrukturen. Grund hierfür ist, dass die meisten
+		Social Media Formate entweder eine Liste von Einträgen sind oder selbst
+		eine Baumstrukturen besitzen. In dieser Arbeit wurde nicht analysiert 
+		welche anderen Formate mit den Deskriptoren dargestellt werden können.
+		Es ist möglich, dass in der Zukunft ein Netz oder eine Taxonomie besser 
+		geeignet ist um Beziehungen von Deskriptoren darzustellen.
+		\item \textbf{Eliminierung des Piggyback Algorithmus:} Ob die 
+		Eliminierung des Piggyback Algorithmus gerechtfertigt war ist fraglich.
+		Gerade bei dem Versand größerer Datenmengen, was hier nicht getestet wurde.
+		Das Beheben des aufgetretenen Fehlers hatte Priorität. In zukünftigen
+		Anpassungen sollte daher übergeleitet werden, ob der Piggyback Algorithmus
+		wieder eingeführt wird.
+		\newpage
+		\item \textbf{Trennung von Assimilation und Deskriptoren-Synchronisation:}
+		Die Klassen AbstractDescriptorSyncKP und DescriptorAssimilationKP 
+		können beide zum Austausch von Deskriptoren genutzt werden. 
+		Erstere behandelt nur Deskriptoren, die bereits bei allen
+		Kommunikationspartner existieren, währenddessen die Zweite das Erlernen
+		dieser ermöglicht. Da sich	Algorithmus und Aufbau ähneln ist zu überlegen,
+		ob die Klassen vereint werden können.	
+	\end{itemize} 
+	
+	\subsection{Schlusswort}
+	
+	In dieser Arbeit ist es gelungen einen Algorithmus zu implementieren, der
+	es ermöglicht definierte Bereiche einer Wissensbasis zu synchronisieren.
+	Dabei ist eine Beschreibung eines Raumes von Daten die Grundlage. Diese
+	ist nicht an die Synchronisation gebunden und kann auch
+	für andere Anwendungsfälle genutzt werden. Es besteht die Möglichkeit Beziehungen
+	zwischen den Räumen zu definiert. Besagte Beziehungen sind abstrakt und können
+	je nach	vorliegendem Fall einem anderen Zweck dienen. Durch Ableitung der 
+	Klassen zur Synchronisation ist	es möglich diese anzupassen. Dadurch kann 
+	die vorliegende Softwarekomponente auch in Projekten mit
+	anderen Anforderungen einzusetzen werden. Allerdings hat die Implementierung
+	noch nicht ihre Tauglichkeit für größere Projekte bewiesen. Die 
+	durchgeführten Modultest sind klein bezogen auf die Anzahl an Personen
+	und Daten. Es ist zu erwartet, dass in Zukunft Probleme auftauchen,
+	die in dieser Arbeit nicht aufgegriffen wurden. Von daher stellt die Arbeit
+	eher ein Proof of Concept als eine ausgereifte Implementierung da. 
+	Die Wahrscheinlichkeit, dass sich zukünftige Projekte mit der Verfeinerungen 
+	der hier Beschriebenen Methode und Algorithmen befassen müssen, ist hoch. 
 	
 	\newpage
 	\section{Quellenverzeichnis}	
